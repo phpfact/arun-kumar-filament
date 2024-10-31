@@ -18,7 +18,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
@@ -769,6 +771,7 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             if ($modifyQueryUsing) {
                 $relationshipQuery = $component->evaluate($modifyQueryUsing, [
                     'query' => $relationshipQuery,
+                    'search' => null,
                 ]) ?? $relationshipQuery;
             }
 
@@ -816,6 +819,7 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
                 if ($modifyQueryUsing) {
                     $component->evaluate($modifyQueryUsing, [
                         'query' => $relationship->getQuery(),
+                        'search' => null,
                     ]);
                 }
 
@@ -837,11 +841,37 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             }
 
             if ($relationship instanceof BelongsToThrough) {
+                /** @var ?Model $relatedModel */
                 $relatedModel = $relationship->getResults();
 
                 $component->state(
-                    $relatedModel->getAttribute(
+                    $relatedModel?->getAttribute(
                         $relationship->getRelated()->getKeyName(),
+                    ),
+                );
+
+                return;
+            }
+
+            if ($relationship instanceof HasMany) {
+                /** @var Collection $relatedRecords */
+                $relatedRecords = $relationship->getResults();
+
+                $component->state(
+                    $relatedRecords
+                        ->pluck($relationship->getForeignKeyName())
+                        ->all(),
+                );
+
+                return;
+            }
+
+            if ($relationship instanceof HasOne) {
+                $relatedModel = $relationship->getResults();
+
+                $component->state(
+                    $relatedModel?->getAttribute(
+                        $relationship->getForeignKeyName(),
                     ),
                 );
 
@@ -851,12 +881,8 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             /** @var BelongsTo $relationship */
             $relatedModel = $relationship->getResults();
 
-            if (! $relatedModel) {
-                return;
-            }
-
             $component->state(
-                $relatedModel->getAttribute(
+                $relatedModel?->getAttribute(
                     $relationship->getOwnerKeyName(),
                 ),
             );
@@ -886,6 +912,7 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             if ($modifyQueryUsing) {
                 $relationshipQuery = $component->evaluate($modifyQueryUsing, [
                     'query' => $relationshipQuery,
+                    'search' => null,
                 ]) ?? $relationshipQuery;
             }
 
@@ -904,6 +931,7 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             if ($modifyQueryUsing) {
                 $relationshipQuery = $component->evaluate($modifyQueryUsing, [
                     'query' => $relationshipQuery,
+                    'search' => null,
                 ]) ?? $relationshipQuery;
             }
 
@@ -985,18 +1013,21 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             if ($modifyQueryUsing) {
                 $component->evaluate($modifyQueryUsing, [
                     'query' => $relationship->getQuery(),
+                    'search' => null,
                 ]);
             }
 
             /** @var Collection $relatedRecords */
             $relatedRecords = $relationship->getResults();
 
+            $state = Arr::wrap($state ?? []);
+
             $recordsToDetach = array_diff(
                 $relatedRecords
                     ->pluck($relationship->getRelatedKeyName())
                     ->map(static fn ($key): string => strval($key))
                     ->all(),
-                $state ?? [],
+                $state,
             );
 
             if (count($recordsToDetach) > 0) {
@@ -1006,12 +1037,12 @@ class Select extends Field implements Contracts\CanDisableOptions, Contracts\Has
             $pivotData = $component->getPivotData();
 
             if ($pivotData === []) {
-                $relationship->sync($state ?? [], detaching: false);
+                $relationship->sync($state, detaching: false);
 
                 return;
             }
 
-            $relationship->syncWithPivotValues($state ?? [], $pivotData, detaching: false);
+            $relationship->syncWithPivotValues($state, $pivotData, detaching: false);
         });
 
         $this->createOptionUsing(static function (Select $component, array $data, Form $form) {

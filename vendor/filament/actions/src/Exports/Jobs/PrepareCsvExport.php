@@ -52,7 +52,7 @@ class PrepareCsvExport implements ShouldQueue
 
     public function handle(): void
     {
-        $csv = Writer::createFromFileObject(new SplTempFileObject());
+        $csv = Writer::createFromFileObject(new SplTempFileObject);
         $csv->setOutputBOM(ByteSequence::BOM_UTF8);
         $csv->setDelimiter($this->exporter::getCsvDelimiter());
         $csv->insertOne(array_values($this->columnMap));
@@ -72,10 +72,25 @@ class PrepareCsvExport implements ShouldQueue
                 ->reject(fn (array $order): bool => in_array($order['column'] ?? null, [$keyName, $qualifiedKeyName]))
                 ->unique('column');
 
+            /** @var array<string, mixed> $originalBindings */
+            $originalBindings = $query->getRawBindings();
+
             $query->reorder($qualifiedKeyName);
 
             foreach ($originalOrders as $order) {
+                if (blank($order['column'] ?? null) || blank($order['direction'] ?? null)) {
+                    continue;
+                }
+
                 $query->orderBy($order['column'], $order['direction']);
+            }
+
+            $newBindings = $query->getRawBindings();
+
+            foreach ($originalBindings as $key => $value) {
+                if ($binding = array_diff($value, $newBindings[$key])) {
+                    $query->addBinding($binding, $key);
+                }
             }
         }
 
@@ -103,14 +118,14 @@ class PrepareCsvExport implements ShouldQueue
             $jobs = [];
 
             foreach (array_chunk($records, length: $this->chunkSize) as $recordsChunk) {
-                $jobs[] = new $exportCsvJob(
-                    $this->export,
-                    $this->query,
-                    $recordsChunk,
-                    $page,
-                    $this->columnMap,
-                    $this->options,
-                );
+                $jobs[] = app($exportCsvJob, [
+                    'export' => $this->export,
+                    'query' => $this->query,
+                    'records' => $recordsChunk,
+                    'page' => $page,
+                    'columnMap' => $this->columnMap,
+                    'options' => $this->options,
+                ]);
 
                 $page++;
             }

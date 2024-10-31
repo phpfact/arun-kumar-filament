@@ -67,7 +67,7 @@
             <div
                 x-ignore
                 @if (FilamentView::hasSpaMode())
-                    ax-load="visible"
+                    {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
                 @else
                     ax-load
                 @endif
@@ -77,7 +77,7 @@
                                 '{{ convert_date_format($getDisplayFormat())->to('day.js') }}',
                             firstDayOfWeek: {{ $getFirstDayOfWeek() }},
                             isAutofocused: @js($isAutofocused()),
-                            locale: @js(app()->getLocale()),
+                            locale: @js($getLocale()),
                             shouldCloseOnDateSelection: @js($shouldCloseOnDateSelection()),
                             state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')") }},
                         })"

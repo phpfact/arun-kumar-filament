@@ -14,9 +14,11 @@ php artisan make:notifications-table
 # Laravel 10
 php artisan queue:batches-table
 php artisan notifications:table
+```
 
+```bash
+# All apps
 php artisan vendor:publish --tag=filament-actions-migrations
-
 php artisan migrate
 ```
 
@@ -383,6 +385,8 @@ public function getFileDisk(): string
     return 's3';
 }
 ```
+
+Export files that are created are the developer's responsibility to delete if they wish. Filament does not delete these files in case the exports need to be downloaded again at a later date.
 
 ### Configuring the export file names
 

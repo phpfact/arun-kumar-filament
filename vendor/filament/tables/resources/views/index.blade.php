@@ -10,6 +10,7 @@
     use Illuminate\Support\Str;
 
     $actions = $getActions();
+    $flatActionsCount = count($getFlatActions());
     $actionsAlignment = $getActionsAlignment();
     $actionsPosition = $getActionsPosition();
     $actionsColumnLabel = $getActionsColumnLabel();
@@ -69,6 +70,7 @@
     $reorderRecordsTriggerAction = $getReorderRecordsTriggerAction($isReordering);
     $toggleColumnsTriggerAction = $getToggleColumnsTriggerAction();
     $page = $this->getTablePage();
+    $defaultSortOptionLabel = $getDefaultSortOptionLabel();
 
     if (count($actions) && (! $isReordering)) {
         $columnsCount++;
@@ -131,6 +133,8 @@
             x-show="@js($hasHeader) || (selectedRecords.length && @js(count($bulkActions)))"
             class="fi-ta-header-ctn divide-y divide-gray-200 dark:divide-white/10"
         >
+            {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\Tables\View\TablesRenderHook::HEADER_BEFORE, scopes: static::class) }}
+
             @if ($header)
                 {{ $header }}
             @elseif (($heading || $description || $headerActions) && ! $isReordering)
@@ -141,6 +145,8 @@
                     :heading="$heading"
                 />
             @endif
+
+            {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\Tables\View\TablesRenderHook::HEADER_AFTER, scopes: static::class) }}
 
             @if ($hasFiltersAboveContent)
                 <div
@@ -167,6 +173,8 @@
                     @endif
                 </div>
             @endif
+
+            {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\Tables\View\TablesRenderHook::TOOLBAR_BEFORE, scopes: static::class) }}
 
             <div
                 @if (! $hasHeaderToolbar) x-cloak @endif
@@ -253,6 +261,8 @@
 
                 {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\Tables\View\TablesRenderHook::TOOLBAR_END) }}
             </div>
+
+            {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\Tables\View\TablesRenderHook::TOOLBAR_AFTER) }}
         </div>
 
         @if ($isReordering)
@@ -275,7 +285,7 @@
         @endif
 
         <div
-            @if ($pollingInterval = $getPollingInterval())
+            @if ((! $isReordering) && ($pollingInterval = $getPollingInterval()))
                 wire:poll.{{ $pollingInterval }}
             @endif
             @class([
@@ -315,7 +325,7 @@
                                         return null
                                     "
                                     x-on:click="toggleSelectRecordsOnPage"
-                                    class="my-4"
+                                    class="fi-ta-page-checkbox my-4"
                                 />
                             @endif
 
@@ -349,7 +359,9 @@
                                             <x-filament::input.select
                                                 x-model="column"
                                             >
-                                                <option value="">-</option>
+                                                <option value="">
+                                                    {{ $defaultSortOptionLabel }}
+                                                </option>
 
                                                 @foreach ($sortableColumns as $column)
                                                     <option
@@ -417,6 +429,7 @@
                                 $recordAction = $getRecordAction($record);
                                 $recordKey = $getRecordKey($record);
                                 $recordUrl = $getRecordUrl($record);
+                                $openRecordUrlInNewTab = $shouldOpenRecordUrlInNewTab($record);
                                 $recordGroupKey = $group?->getStringKey($record);
                                 $recordGroupTitle = $group?->getTitle($record);
 
@@ -454,7 +467,7 @@
                                         'col-span-full',
                                         '-mx-4 w-[calc(100%+2rem)] border-y border-gray-200 first:border-t-0 dark:border-white/5 sm:-mx-6 sm:w-[calc(100%+3rem)]' => $contentGrid,
                                     ])
-                                    :x-bind:class="$hasSummary ? null : '{ \'-mb-4 border-b-0\': isGroupCollapsed(\'' . $recordGroupTitle . '\') }'"
+                                    :x-bind:class="$hasSummary ? null : '{ \'-mb-4 border-b-0\': isGroupCollapsed(' . \Illuminate\Support\Js::from($recordGroupTitle) . ') }'"
                                 >
                                     @if ($isSelectionEnabled)
                                         <x-slot name="start">
@@ -493,7 +506,9 @@
                                 x-bind:class="{
                                     'hidden':
                                         {{ $group?->isCollapsible() ? 'true' : 'false' }} &&
-                                        isGroupCollapsed('{{ $recordGroupTitle }}'),
+                                        isGroupCollapsed(
+                                            {{ \Illuminate\Support\Js::from($recordGroupTitle) }},
+                                        ),
                                     {{ ($contentGrid ? '\'bg-gray-50 dark:bg-white/10 dark:ring-white/20\'' : '\'bg-gray-50 dark:bg-white/5 before:absolute before:start-0 before:inset-y-0 before:w-0.5 before:bg-primary-600 dark:before:bg-primary-500\'') . ': isRecordSelected(\'' . $recordKey . '\')' }},
                                     {{ $contentGrid ? '\'bg-white dark:bg-white/5 dark:ring-white/10\': ! isRecordSelected(\'' . $recordKey . '\')' : '\'\':\'\'' }},
                                 }"
@@ -568,7 +583,7 @@
                                         <div class="flex-1">
                                             @if ($recordUrl)
                                                 <a
-                                                    {{ \Filament\Support\generate_href_html($recordUrl) }}
+                                                    {{ \Filament\Support\generate_href_html($recordUrl, $openRecordUrlInNewTab) }}
                                                     class="{{ $recordContentClasses }}"
                                                 >
                                                     <x-filament-tables::columns.layout
@@ -779,7 +794,10 @@
                                         {{ $actionsColumnLabel }}
                                     </x-filament-tables::header-cell>
                                 @else
-                                    <th class="w-1"></th>
+                                    <th
+                                        aria-label="{{ trans_choice('filament-tables::table.columns.actions.label', $flatActionsCount) }}"
+                                        class="fi-ta-actions-header-cell w-1"
+                                    ></th>
                                 @endif
                             @endif
 
@@ -803,6 +821,7 @@
                                             return null
                                         "
                                         x-on:click="toggleSelectRecordsOnPage"
+                                        class="fi-ta-page-checkbox"
                                     />
                                 </x-filament-tables::selection.cell>
                             @endif
@@ -813,7 +832,10 @@
                                         {{ $actionsColumnLabel }}
                                     </x-filament-tables::header-cell>
                                 @else
-                                    <th class="w-1"></th>
+                                    <th
+                                        aria-label="{{ trans_choice('filament-tables::table.columns.actions.label', $flatActionsCount) }}"
+                                        class="fi-ta-actions-header-cell w-1"
+                                    ></th>
                                 @endif
                             @endif
                         @endif
@@ -856,7 +878,10 @@
                                         {{ $actionsColumnLabel }}
                                     </x-filament-tables::header-cell>
                                 @else
-                                    <th class="w-1"></th>
+                                    <th
+                                        aria-label="{{ trans_choice('filament-tables::table.columns.actions.label', $flatActionsCount) }}"
+                                        class="fi-ta-actions-header-cell w-1"
+                                    ></th>
                                 @endif
                             @endif
 
@@ -880,6 +905,7 @@
                                             return null
                                         "
                                         x-on:click="toggleSelectRecordsOnPage"
+                                        class="fi-ta-page-checkbox"
                                     />
                                 </x-filament-tables::selection.cell>
                             @endif
@@ -892,7 +918,10 @@
                                         {{ $actionsColumnLabel }}
                                     </x-filament-tables::header-cell>
                                 @else
-                                    <th class="w-1"></th>
+                                    <th
+                                        aria-label="{{ trans_choice('filament-tables::table.columns.actions.label', $flatActionsCount) }}"
+                                        class="fi-ta-actions-header-cell w-1"
+                                    ></th>
                                 @endif
                             @endif
                         @endif
@@ -954,6 +983,7 @@
                                 $recordAction = $getRecordAction($record);
                                 $recordKey = $getRecordKey($record);
                                 $recordUrl = $getRecordUrl($record);
+                                $openRecordUrlInNewTab = $shouldOpenRecordUrlInNewTab($record);
                                 $recordGroupKey = $group?->getStringKey($record);
                                 $recordGroupTitle = $group?->getTitle($record);
                             @endphp
@@ -1039,7 +1069,7 @@
 
                             @if (! $isGroupsOnly)
                                 <x-filament-tables::row
-                                    :alpine-hidden="($group?->isCollapsible() ? 'true' : 'false') . ' && isGroupCollapsed(\'' . $recordGroupTitle . '\')'"
+                                    :alpine-hidden="($group?->isCollapsible() ? 'true' : 'false') . ' && isGroupCollapsed(' . \Illuminate\Support\Js::from($recordGroupTitle) . ')'"
                                     :alpine-selected="'isRecordSelected(\'' . $recordKey . '\')'"
                                     :record-action="$recordAction"
                                     :record-url="$recordUrl"
@@ -1121,6 +1151,7 @@
                                                 :record-action="$recordAction"
                                                 :record-key="$recordKey"
                                                 :record-url="$recordUrl"
+                                                :should-open-record-url-in-new-tab="$openRecordUrlInNewTab"
                                             />
                                         </x-filament-tables::cell>
                                     @endforeach

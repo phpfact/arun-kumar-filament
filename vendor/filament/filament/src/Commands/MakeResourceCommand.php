@@ -85,7 +85,7 @@ class MakeResourceCommand extends Command
         $panel = $this->option('panel');
 
         if ($panel) {
-            $panel = Filament::getPanel($panel);
+            $panel = Filament::getPanel($panel, isStrict: false);
         }
 
         if (! $panel) {
@@ -104,6 +104,13 @@ class MakeResourceCommand extends Command
 
         $resourceDirectories = $panel->getResourceDirectories();
         $resourceNamespaces = $panel->getResourceNamespaces();
+
+        foreach ($resourceDirectories as $resourceIndex => $resourceDirectory) {
+            if (str($resourceDirectory)->startsWith(base_path('vendor'))) {
+                unset($resourceDirectories[$resourceIndex]);
+                unset($resourceNamespaces[$resourceIndex]);
+            }
+        }
 
         $namespace = (count($resourceNamespaces) > 1) ?
             select(

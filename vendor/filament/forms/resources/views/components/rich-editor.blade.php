@@ -24,7 +24,7 @@
         >
             <div
                 @if (FilamentView::hasSpaMode())
-                    ax-load="visible"
+                    {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
                 @else
                     ax-load
                 @endif
@@ -104,7 +104,6 @@
                                         data-trix-key="b"
                                         title="{{ __('filament-forms::components.rich_editor.toolbar_buttons.bold') }}"
                                         tabindex="-1"
-                                        title="{{ __('filament-forms::components.rich_editor.toolbar_buttons.bold') }}"
                                     >
                                         <svg
                                             class="-mx-4 h-4 dark:fill-current"
@@ -152,6 +151,7 @@
                                 @if ($hasToolbarButton('underline'))
                                     <x-filament-forms::rich-editor.toolbar.button
                                         data-trix-attribute="underline"
+                                        data-trix-key="u"
                                         title="{{ __('filament-forms::components.rich_editor.toolbar_buttons.underline') }}"
                                         tabindex="-1"
                                     >
@@ -176,6 +176,7 @@
                                 @if ($hasToolbarButton('strike'))
                                     <x-filament-forms::rich-editor.toolbar.button
                                         data-trix-attribute="strike"
+                                        data-trix-key="s"
                                         title="{{ __('filament-forms::components.rich_editor.toolbar_buttons.strike') }}"
                                         tabindex="-1"
                                     >
@@ -500,6 +501,11 @@
                     @endif
                     x-ref="trix"
                     wire:ignore
+                    @if ($isGrammarlyDisabled())
+                        data-gramm="false"
+                        data-gramm_editor="false"
+                        data-enable-grammarly="false"
+                    @endif
                     {{
                         $getExtraInputAttributeBag()->class([
                             'prose min-h-[theme(spacing.48)] max-w-none !border-none px-3 py-1.5 text-base text-gray-950 dark:prose-invert focus-visible:outline-none dark:text-white sm:text-sm sm:leading-6',

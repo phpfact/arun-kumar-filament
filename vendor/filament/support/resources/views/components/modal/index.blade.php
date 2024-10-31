@@ -1,11 +1,13 @@
 @php
     use Filament\Support\Enums\Alignment;
     use Filament\Support\Enums\MaxWidth;
+    use Filament\Support\Facades\FilamentView;
 @endphp
 
 @props([
     'alignment' => Alignment::Start,
     'ariaLabelledby' => null,
+    'autofocus' => \Filament\Support\View\Components\Modal::$isAutofocused,
     'closeButton' => \Filament\Support\View\Components\Modal::$hasCloseButton,
     'closeByClickingAway' => \Filament\Support\View\Components\Modal::$isClosedByClickingAway,
     'closeByEscaping' => \Filament\Support\View\Components\Modal::$isClosedByEscaping,
@@ -70,32 +72,27 @@
             this.$refs.modalContainer.dispatchEvent(
                 new CustomEvent('modal-closed', { id: '{{ $id }}' }),
             )
-
-            {{-- this.$nextTick(() => {
-                if (document.getElementsByClassName('fi-modal-open').length) {
-                    return
-                }
-
-                window.clearAllBodyScrollLocks()
-            }) --}}
         },
 
         open: function () {
-            this.isOpen = true
+            this.$nextTick(() => {
+                this.isOpen = true
 
-            {{-- window.clearAllBodyScrollLocks()
-            window.disableBodyScroll(this.$root) --}}
+                @if (FilamentView::hasSpaMode())
+                    this.$dispatch('ax-modal-opened')
+                @endif
 
-            this.$refs.modalContainer.dispatchEvent(
-                new CustomEvent('modal-opened', { id: '{{ $id }}' }),
-            )
+                this.$refs.modalContainer.dispatchEvent(
+                    new CustomEvent('modal-opened', { id: '{{ $id }}' }),
+                )
+            })
         },
     }"
     @if ($id)
         x-on:{{ $closeEventName }}.window="if ($event.detail.id === '{{ $id }}') close()"
         x-on:{{ $openEventName }}.window="if ($event.detail.id === '{{ $id }}') open()"
     @endif
-    x-trap.noscroll="isOpen"
+    x-trap.noscroll{{ $autofocus ? '' : '.noautofocus' }}="isOpen"
     x-bind:class="{
         'fi-modal-open': isOpen,
     }"
@@ -175,7 +172,7 @@
                         x-transition:leave-end="scale-95 opacity-0"
                     @endif
                     {{
-                        ($extraModalWindowAttributeBag ?? new \Illuminate\View\ComponentAttributeBag())->class([
+                        ($extraModalWindowAttributeBag ?? new \Illuminate\View\ComponentAttributeBag)->class([
                             'fi-modal-window pointer-events-auto relative row-start-2 flex w-full cursor-default flex-col bg-white shadow-xl ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10',
                             'fi-modal-slide-over-window ms-auto overflow-y-auto' => $slideOver,
                             // Using an arbitrary value instead of the h-dvh class that was added in Tailwind CSS v3.4.0

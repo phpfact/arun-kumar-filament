@@ -45,15 +45,15 @@ class FilamentServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->scoped('filament', function (): FilamentManager {
-            return new FilamentManager();
+            return new FilamentManager;
         });
 
         $this->app->singleton(PanelRegistry::class, function (): PanelRegistry {
-            return new PanelRegistry();
+            return new PanelRegistry;
         });
 
         $this->app->scoped(NavigationManager::class, function (): NavigationManager {
-            return new NavigationManager();
+            return new NavigationManager;
         });
 
         $this->app->bind(EmailVerificationResponseContract::class, EmailVerificationResponse::class);
@@ -95,6 +95,13 @@ class FilamentServiceProvider extends PackageServiceProvider
                 $this->publishes([
                     $file->getRealPath() => base_path("stubs/filament/{$file->getFilename()}"),
                 ], 'filament-stubs');
+            }
+
+            if (method_exists($this, 'optimizes')) {
+                $this->optimizes(
+                    optimize: 'filament:optimize', /** @phpstan-ignore-line */
+                    clear: 'filament:optimize-clear', /** @phpstan-ignore-line */
+                );
             }
         }
     }

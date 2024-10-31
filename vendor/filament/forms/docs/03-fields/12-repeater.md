@@ -79,6 +79,21 @@ Repeater::make('members')
     ->addActionLabel('Add member')
 ```
 
+### Aligning the add action button
+
+By default, the add action is aligned in the center. You may adjust this using the `addActionAlignment()` method, passing an `Alignment` option of `Alignment::Start` or `Alignment::End`:
+
+```php
+use Filament\Forms\Components\Repeater;
+use Filament\Support\Enums\Alignment;
+
+Repeater::make('members')
+    ->schema([
+        // ...
+    ])
+    ->addActionAlignment(Alignment::Start)
+```
+
 ### Preventing the user from adding items
 
 You may prevent the user from adding items to the repeater using the `addable(false)` method:
@@ -449,7 +464,7 @@ Instead of using a nested array to store data, simple repeaters use a flat array
 
 ## Using `$get()` to access parent field values
 
-All form components are able to [use `$get()` and `$set()`](../advanced) to access another field's value. However, you might experience unexpected behaviour when using this inside the repeater's schema.
+All form components are able to [use `$get()` and `$set()`](../advanced) to access another field's value. However, you might experience unexpected behavior when using this inside the repeater's schema.
 
 This is because `$get()` and `$set()`, by default, are scoped to the current repeater item. This means that you are able to interact with another field inside that repeater item easily without knowing which repeater item the current form component belongs to.
 
@@ -474,6 +489,8 @@ You are trying to retrieve the value of `client_id` from inside the repeater ite
 `$get()` is relative to the current repeater item, so `$get('client_id')` is looking for `$get('repeater.item1.client_id')`.
 
 You can use `../` to go up a level in the data structure, so `$get('../client_id')` is `$get('repeater.client_id')` and `$get('../../client_id')` is `$get('client_id')`.
+
+The special case of `$get()` with no arguments, or `$get('')` or `$get('./')`, will always return the full data array for the current repeater item.
 
 ## Repeater validation
 
@@ -515,7 +532,7 @@ Repeater::make('answers')
     ])
 ```
 
-The behaviour of the `distinct()` validation depends on the data type that the field handles
+The behavior of the `distinct()` validation depends on the data type that the field handles
 
 - If the field returns a boolean, like a [checkbox](checkbox) or [toggle](toggle), the validation will ensure that only one item has a value of `true`. There may be many fields in the repeater that have a value of `false`.
 - Otherwise, for fields like a [select](select), [radio](radio), [checkbox list](checkbox-list), or [toggle buttons](toggle-buttons), the validation will ensure that each option may only be selected once across all items in the repeater.
@@ -538,7 +555,7 @@ Repeater::make('answers')
 
 This method will automatically enable the `distinct()` and `live()` methods on the field.
 
-Depending on the data type that the field handles, the behaviour of the `fixIndistinctState()` adapts:
+Depending on the data type that the field handles, the behavior of the `fixIndistinctState()` adapts:
 
 - If the field returns a boolean, like a [checkbox](checkbox) or [toggle](toggle), and one of the fields is enabled, Filament will automatically disable all other enabled fields on behalf of the user.
 - Otherwise, for fields like a [select](select), [radio](radio), [checkbox list](checkbox-list), or [toggle buttons](toggle-buttons), when a user selects an option, Filament will automatically deselect all other usages of that option on behalf of the user.
@@ -595,7 +612,7 @@ Repeater::make('members')
 
 ### Confirming repeater actions with a modal
 
-You can confirm actions with a modal by using the `requiresConfirmation()` method on the action object. You may use any [modal customization method](../../actions/modals) to change its content and behaviour:
+You can confirm actions with a modal by using the `requiresConfirmation()` method on the action object. You may use any [modal customization method](../../actions/modals) to change its content and behavior:
 
 ```php
 use Filament\Forms\Components\Actions\Action;
@@ -692,7 +709,7 @@ livewire(EditPost::class, ['record' => $post])
 $undoRepeaterFake();
 ```
 
-You may also find it useful to access test the number of items in a repeater by passing a function to the `assertFormSet()` method:
+You may also find it useful to test the number of items in a repeater by passing a function to the `assertFormSet()` method:
 
 ```php
 use Filament\Forms\Components\Repeater;
