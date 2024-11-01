@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 26, 2024 at 06:47 PM
+-- Generation Time: Nov 01, 2024 at 03:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -20,6 +20,35 @@ SET time_zone = "+00:00";
 --
 -- Database: `filament-learning`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `artists`
+--
+
+CREATE TABLE `artists` (
+  `id` int(11) NOT NULL,
+  `profile` varchar(255) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `spotify_id` varchar(100) NOT NULL,
+  `apple_id` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `instagram` varchar(100) NOT NULL,
+  `facebook` varchar(100) NOT NULL,
+  `about` text NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `artists`
+--
+
+INSERT INTO `artists` (`id`, `profile`, `name`, `spotify_id`, `apple_id`, `email`, `instagram`, `facebook`, `about`, `customer_id`, `created_at`, `updated_at`) VALUES
+(4, 'uploads/profile/01JB7JR2ZV6X3DK4S2JC5T02AV.jpg', 'Xyz', 'Testing Spotify 123', 'yuhu', 'sachin@gmail.com', 'Rock King', 'ugfy', 'jhg', 1, '2024-10-27 18:10:23', '2024-10-31 08:03:15'),
+(8, 'uploads/profile/01JBGS42ZS1WB8VFBJPGN3B4R7.jpg', 'Nitin', 'Nitin', 'Nitin', 'nitin@n.com', '@InstagramNitin', 'Niy', 'N', 1, '2024-10-31 07:54:57', '2024-10-31 07:54:57');
 
 -- --------------------------------------------------------
 
@@ -117,11 +146,30 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `labels` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
+  `full_name` varchar(255) DEFAULT NULL,
+  `address_1` varchar(255) DEFAULT NULL,
+  `address_2` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `pincode` varchar(255) DEFAULT NULL,
+  `mobile_number` varchar(255) DEFAULT NULL,
+  `email_id` varchar(255) DEFAULT NULL,
+  `aadhar_card_front` varchar(255) DEFAULT NULL,
+  `aadhar_card_back` varchar(255) DEFAULT NULL,
+  `pan_card` varchar(255) DEFAULT NULL,
+  `bank_passbook` varchar(255) DEFAULT NULL,
   `status` enum('0','1','2') NOT NULL DEFAULT '0',
   `customer_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `labels`
+--
+
+INSERT INTO `labels` (`id`, `title`, `full_name`, `address_1`, `address_2`, `city`, `state`, `pincode`, `mobile_number`, `email_id`, `aadhar_card_front`, `aadhar_card_back`, `pan_card`, `bank_passbook`, `status`, `customer_id`, `created_at`, `updated_at`) VALUES
+(1, 'Test 12345', 'Sac', 'Smp', 'test', 'test', 'test', '123123', '1234567890', 'abab@h.com', 'uploads/documents/01JB76866D1BWHCJTP09XV37P1.webp', 'uploads/documents/01JB76866FP6ZTZ22VQ3JTVTZC.jpg', 'uploads/documents/01JB76866GZM9FH6T9J4SHE9AT.png', 'uploads/documents/01JB76866GZM9FH6T9J4SHE9AV.png', '1', 1, '2024-10-27 15:42:08', '2024-10-27 15:42:08');
 
 -- --------------------------------------------------------
 
@@ -260,6 +308,13 @@ CREATE TABLE `remove_copyright_requests` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `remove_copyright_requests`
+--
+
+INSERT INTO `remove_copyright_requests` (`id`, `customer_id`, `song_name`, `yt_video_link`, `provider`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'ds', 'http://127.0.0.1:8000/customer/remove-copyright-requests', '[Merlin] The New Digital Media', 'processing', '2024-10-31 06:22:50', '2024-10-31 06:31:55');
+
 -- --------------------------------------------------------
 
 --
@@ -342,6 +397,7 @@ CREATE TABLE `songs` (
   `composer` longtext DEFAULT NULL,
   `label_name` varchar(255) DEFAULT NULL,
   `label_id` int(11) NOT NULL,
+  `artists_id` varchar(255) NOT NULL,
   `publisher` longtext DEFAULT NULL,
   `copyright` longtext DEFAULT NULL,
   `instagram` varchar(255) DEFAULT NULL,
@@ -368,6 +424,16 @@ CREATE TABLE `songs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `songs`
+--
+
+INSERT INTO `songs` (`id`, `customer_id`, `name`, `singers`, `lyrics`, `produser_name`, `composer`, `label_name`, `label_id`, `artists_id`, `publisher`, `copyright`, `instagram`, `release_date`, `languages`, `cover_photo`, `song_path`, `music_genre`, `music_sub_genre`, `music_mood`, `stream_store`, `fb_ig_music`, `yt_content_id`, `caller_tune`, `caller_tune_name`, `caller_tune_duration`, `explicit`, `isrc_code`, `status`, `reject_reason`, `report_file`, `reward`, `is_added`, `created_at`, `updated_at`) VALUES
+(1, 1, 'fffff', '[\"fffffffff\"]', NULL, 'fffffff', '[\"ffff\"]', NULL, 1, '[\"4\",\"5\",6]', 'ffffffffff', NULL, 'dc', '2024-10-28', '\"punjabi\"', 'uploads/cover_photos/01JB7H9H5ZJMK09AHYB4943S3X.jpg', 'uploads/songs/01JB7H9H648R4F26DWZCG263V5.wav', 'bollywood', 'bollywood_classical', 'sad', 0, 0, 0, 0, NULL, NULL, 0, NULL, 'approved', NULL, NULL, 0, 0, '2024-10-27 17:44:57', '2024-10-29 18:46:07'),
+(2, 1, 'fsd', NULL, NULL, 'fsd', '[\"fsd\"]', NULL, 1, '[\"4\",\"5\",6]', 'fds999', NULL, 'fsd', '2024-10-23', '\"bengali\"', 'uploads/cover_photos/01JBCNFD0AEZZE47GYKMYQ39S5.jpg', 'uploads/songs/01JBCNFD0C37E31EVMDK8CMJ1N.wav', 'bhajan', 'bollywood_folk', 'energetic', 0, 0, 0, 0, NULL, NULL, 0, NULL, 'rejected', 'ii', NULL, 0, 0, '2024-10-29 17:34:16', '2024-10-29 18:49:51'),
+(3, 1, 'fsdaf', NULL, NULL, '[\"fsdaf\",\"f\",\"ew\",\"rew\",\"r\",\"45\",\"ty\",\"45y\",\"456\"]', '[\"fsdf\",\"sf\",\"ew\",\"f\",\"h\",\"rth\",\"56y\",\"u65\",\"756\",\"645\",\"trehgrt\"]', NULL, 1, '[\"5\",\"6\",\"7\",\"4\"]', '[\"dsfsd\'\",\"gfdsg\",\"gdsf\",\"g\",\"dsfgwwe\",\"wer\",\"rwe\",\"qrwe\",\"rfv\"]', NULL, 'fccccccc', '2024-10-31', '\"tamil\"', 'uploads/cover_photos/01JBGPB3W95JQ5YWH7582R1D0V.jpg', 'uploads/songs/01JBGPB3WT1J43QYGQA5D96BXW.wav', 'bollywood', 'bollywood_rock', 'relaxed', 0, 0, 0, 0, NULL, NULL, 0, NULL, 'pending', NULL, NULL, 0, 0, '2024-10-31 07:06:22', '2024-10-31 07:06:22'),
+(4, 1, 'gfdg', NULL, NULL, '[\"sd\"]', '[\"gfd\"]', NULL, 1, '[\"4\"]', '[\"gdfg\"]', NULL, 'Rock King', '2024-10-25', '\"punjabi\"', 'uploads/cover_photos/01JBGSW4BXYKPSXA1GNX3E7SCZ.jpg', 'uploads/songs/01JBGSW4C1KC84WEJCATPFV1N0.wav', 'bhajan', 'bollywood_rock', 'relaxed', 0, 0, 0, 0, NULL, NULL, 0, NULL, 'pending', NULL, NULL, 0, 0, '2024-10-31 08:08:05', '2024-10-31 08:08:05');
 
 -- --------------------------------------------------------
 
@@ -406,11 +472,12 @@ CREATE TABLE `video_songs` (
   `title` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `singers` longtext DEFAULT NULL,
-  `produser_name` varchar(255) NOT NULL,
+  `produser_name` longtext NOT NULL,
   `lyrics` longtext DEFAULT NULL,
   `composer` longtext DEFAULT NULL,
   `label_name` varchar(255) DEFAULT NULL,
   `label_id` int(11) DEFAULT NULL,
+  `artists_id` varchar(255) NOT NULL,
   `publisher` longtext DEFAULT NULL,
   `music_genre` varchar(150) NOT NULL,
   `music_sub_genre` varchar(150) NOT NULL,
@@ -433,8 +500,21 @@ CREATE TABLE `video_songs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `video_songs`
+--
+
+INSERT INTO `video_songs` (`id`, `customer_id`, `title`, `name`, `singers`, `produser_name`, `lyrics`, `composer`, `label_name`, `label_id`, `artists_id`, `publisher`, `music_genre`, `music_sub_genre`, `music_mood`, `copyright`, `instagram`, `release_date`, `languages`, `cover_photo`, `video_path`, `isrc_code`, `status`, `reject_reason`, `report_file`, `youtube_link`, `reward`, `is_added`, `created_at`, `updated_at`) VALUES
+(1, 1, 'fsd', NULL, NULL, '[\"sfsd\",\"fsadfa\",\"ytruyt\"]', NULL, '[\"fdsf\",\"fsdf\",\"nghfn\"]', NULL, 1, '[\"4\",\"5\"]', '[\"fdsfds\",\"fsbhgf\",\"urtu\"]', 'ghazal', 'bollywood_folk', 'energetic', NULL, 'yreyr', '2024-10-31', '\"tamil\"', 'uploads/video_cover_photos/01JBGNN06P0THFWP81ETG2D55X.jpg', 'uploads/video_songs/01JBGNN06Q44HHDCT0QCMGBPB3.mp4', NULL, 'pending', NULL, NULL, NULL, 0, 0, '2024-10-31 06:54:17', '2024-10-31 06:54:17');
+
+--
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `artists`
+--
+ALTER TABLE `artists`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `artist_channels`
@@ -558,6 +638,12 @@ ALTER TABLE `video_songs`
 --
 
 --
+-- AUTO_INCREMENT for table `artists`
+--
+ALTER TABLE `artists`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `artist_channels`
 --
 ALTER TABLE `artist_channels`
@@ -585,7 +671,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `labels`
 --
 ALTER TABLE `labels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -609,7 +695,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `remove_copyright_requests`
 --
 ALTER TABLE `remove_copyright_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -627,7 +713,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `songs`
 --
 ALTER TABLE `songs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -639,7 +725,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `video_songs`
 --
 ALTER TABLE `video_songs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
