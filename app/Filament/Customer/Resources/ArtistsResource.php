@@ -8,6 +8,7 @@ use App\Models\Artists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,6 +52,7 @@ class ArtistsResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('customer_id', Auth::guard('customer')->user()->id))
             ->columns([
                 Tables\Columns\ImageColumn::make('profile')
                 ->size(150)
