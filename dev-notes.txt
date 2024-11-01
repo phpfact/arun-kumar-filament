@@ -1,34 +1,29 @@
 
+Table upload on server:
 
 
-app/Filament/Customer/Resources/LabelResource/Pages/ListLabels.php
+notifications
+exports
+imports
+job_batches
+failed_import_rows
+job_batches
+
+-------------------------------
+
+
+https://youtu.be/85uRvsUvwJQ?si=KSHtbe7JFe7-dxf-
+
+php artisan make:filament-exporter CustomerSongResource
+
+app/Filament/Exports/CustomerSongResourceExporter.php
 
 
 
+https://filamentphp.com/docs/3.x/actions/prebuilt-actions/export
+
+-------------------------------
 
 
-
-
-
-
-
-app/Filament/Customer/Resources/VideoSongResource/Pages/ListVideoSongs.php
-
-app/Filament/Customer/Resources/SongResource/Pages/ListSongs.php
-
-app/Filament/Customer/Resources/LabelResource/Pages/ListLabels.php
-
-
-
-
-app/Filament/Resources/SongResource/Pages/ListSongs.php
-
-app/Filament/Resources/VideoSongResource/Pages/ListVideoSongs.php
-
-app/Filament/Resources/LabelResource/Pages/ListLabels.php
-
-app/Providers/Filament/CustomerPanelProvider.php
-
---------------------------------------------------------------------------------
 
 

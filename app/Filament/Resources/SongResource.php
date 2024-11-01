@@ -691,17 +691,17 @@ public static function form(Form $form): Form
                             ->required(),
 
                         FileUpload::make('song_path')
-                            ->label('Upload Song')
-                            ->disk('public')
-                            ->directory('uploads/songs')
-                            ->acceptedFileTypes(['audio/x-wav', 'audio/wav'])
-                            ->rules(['mimes:application/octet-stream,mp3,wav'])
-                            ->validationMessages([
-                                'mimes' => 'Please upload only .mp3 or .wav file.',
-                                'max' => 'The song must not be greater than 200 MB.'
-                            ])
-                            ->maxSize(2000 * 1024)
-                            ->required(),
+                                ->label('Upload Song')
+                                ->disk('public')
+                                ->directory('uploads/songs')
+                                ->acceptedFileTypes(['audio/x-wav', 'audio/wav', 'audio/mpeg'])
+                                ->rules(['mimes:application/octet-stream,mp3,wav'])
+                                ->validationMessages([
+                                    'mimes' => 'Please upload only .mp3 or .wav file.',
+                                    'max' => 'The song must not be greater than 200 MB.'
+                                ])
+                                ->maxSize(2000 * 1024)
+                                ->required()
 
                     ]),
 

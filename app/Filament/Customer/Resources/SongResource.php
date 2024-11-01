@@ -6,6 +6,7 @@ use Filament\Forms;
 use App\Models\Song;
 use Filament\Tables;
 use App\Models\Label;
+use App\Models\Artists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Faker\Provider\ar_EG\Text;
@@ -29,10 +30,10 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Tables\Actions\ExportBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Customer\Resources\SongResource\Pages;
 use App\Filament\Customer\Resources\SongResource\RelationManagers;
-use App\Models\Artists;
 
 class SongResource extends Resource
 {
@@ -559,14 +560,14 @@ class SongResource extends Resource
                                 ->label('Upload Song')
                                 ->disk('public')
                                 ->directory('uploads/songs')
-                                ->acceptedFileTypes(['audio/x-wav', 'audio/wav'])
+                                ->acceptedFileTypes(['audio/x-wav', 'audio/wav', 'audio/mpeg'])
                                 ->rules(['mimes:application/octet-stream,mp3,wav'])
                                 ->validationMessages([
                                     'mimes' => 'Please upload only .mp3 or .wav file.',
                                     'max' => 'The song must not be greater than 200 MB.'
                                 ])
                                 ->maxSize(2000 * 1024)
-                                ->required(),
+                                ->required()
 
                         ]),
     
@@ -717,8 +718,16 @@ class SongResource extends Resource
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn ($record) => in_array($record->status, ['rejected'])),
                 
-            ])
-            ->bulkActions([]);
+                ]);
+            // ->headerActions([
+            //     Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\CustomerSongResourceExporter::class)
+            // ])
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make()
+            //     ]),
+            //     ExportBulkAction::make()->exporter(\App\Filament\Exports\CustomerSongResourceExporter::class)
+            // ]);
     }
 
     public static function getRelations(): array
