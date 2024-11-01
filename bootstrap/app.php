@@ -46,6 +46,9 @@ $app->singleton(
 $request = Request::capture();
 $server_name = $request->server('SERVER_NAME');
 
+echo $server_name;die();
+
+
 if ($server_name == '127.0.0.1' || $server_name == 'localhost' || $server_name == NULL) {
     $app->loadEnvironmentFrom('.env');
 } else {
