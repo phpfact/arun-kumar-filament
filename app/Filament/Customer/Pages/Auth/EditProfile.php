@@ -29,55 +29,55 @@ class EditProfile extends BaseEditProfile
                         TextInput::make('last_name')
                             ->label('Last Name'),
 
-                        TextInput::make('father_first_name')
-                            ->required()
-                            ->label('Father\'s First Name'),
+                        // TextInput::make('father_first_name')
+                        //     ->required()
+                        //     ->label('Father\'s First Name'),
 
-                        TextInput::make('father_last_name')
-                            ->label('Father\'s Last Name'),
+                        // TextInput::make('father_last_name')
+                        //     ->label('Father\'s Last Name'),
 
-                        TextInput::make('mother_first_name')
-                            ->required()
-                            ->label('Mother\'s First Name'),
+                        // TextInput::make('mother_first_name')
+                        //     ->required()
+                        //     ->label('Mother\'s First Name'),
 
-                        TextInput::make('mother_last_name')
-                            ->label('Mother\'s Last Name'),
-
-                    ]),
-
-                Fieldset::make('Address')
-                    ->relationship('address')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('address1')
-                            ->required()
-                            ->label('Address Line 1'),
-
-                        TextInput::make('address2')
-                            ->required()
-                            ->label('Address Line 2'),
-
-                        Grid::make(3)
-                            ->schema([
-                                TextInput::make('city')
-                                    ->required()
-                                    ->label('City'),
-
-                                TextInput::make('state')
-                                    ->required()
-                                    ->label('State'),
-
-                                TextInput::make('country')
-                                    ->formatStateUsing(fn ($state) => $state ?? "India")
-                                    ->readOnly()
-                                    ->required()
-                                    ->label('Country'),
-
-                            ]),
-
-
+                        // TextInput::make('mother_last_name')
+                        //     ->label('Mother\'s Last Name'),
 
                     ]),
+
+                // Fieldset::make('Address')
+                //     ->relationship('address')
+                //     ->columns(2)
+                //     ->schema([
+                //         TextInput::make('address1')
+                //             ->required()
+                //             ->label('Address Line 1'),
+
+                //         TextInput::make('address2')
+                //             ->required()
+                //             ->label('Address Line 2'),
+
+                //         Grid::make(3)
+                //             ->schema([
+                //                 TextInput::make('city')
+                //                     ->required()
+                //                     ->label('City'),
+
+                //                 TextInput::make('state')
+                //                     ->required()
+                //                     ->label('State'),
+
+                //                 TextInput::make('country')
+                //                     ->formatStateUsing(fn ($state) => $state ?? "India")
+                //                     ->readOnly()
+                //                     ->required()
+                //                     ->label('Country'),
+
+                //             ]),
+
+
+
+                //     ]),
 
                 Fieldset::make('Contact Details')
                     ->columns(3)
@@ -95,54 +95,54 @@ class EditProfile extends BaseEditProfile
                         $this->getEmailFormComponent(),
                     ]),
 
-                Fieldset::make('Documents')
-                    ->columns(3)
-                    ->schema([
-                        FileUpload::make('aadhar_card_front')
-                            ->required()
-                            ->disk('public')
-                            ->directory('assets/uploads/documents')
-                            ->image()
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ])
-                            ->maxSize(512)
-                            ->preserveFilenames()
-                            ->label('Upload Aadhar Card (Front Side)'),
+                // Fieldset::make('Documents')
+                //     ->columns(3)
+                //     ->schema([
+                //         FileUpload::make('aadhar_card_front')
+                //             ->required()
+                //             ->disk('public')
+                //             ->directory('assets/uploads/documents')
+                //             ->image()
+                //             ->imageEditor()
+                //             ->imageEditorAspectRatios([
+                //                 '16:9',
+                //                 '4:3',
+                //                 '1:1',
+                //             ])
+                //             ->maxSize(512)
+                //             ->preserveFilenames()
+                //             ->label('Upload Aadhar Card (Front Side)'),
 
-                        FileUpload::make('aadhar_card_back')
-                            ->required()
-                            ->disk('public')
-                            ->directory('assets/uploads/documents')
-                            ->image()
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ])
-                            ->maxSize(512)
-                            ->preserveFilenames()
-                            ->label('Upload Aadhar Card (Back Side)'),
+                //         FileUpload::make('aadhar_card_back')
+                //             ->required()
+                //             ->disk('public')
+                //             ->directory('assets/uploads/documents')
+                //             ->image()
+                //             ->imageEditor()
+                //             ->imageEditorAspectRatios([
+                //                 '16:9',
+                //                 '4:3',
+                //                 '1:1',
+                //             ])
+                //             ->maxSize(512)
+                //             ->preserveFilenames()
+                //             ->label('Upload Aadhar Card (Back Side)'),
 
-                        FileUpload::make('pancard')
-                            ->required()
-                            ->disk('public')
-                            ->directory('assets/uploads/documents')
-                            ->image()
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ])
-                            ->maxSize(512)
-                            ->preserveFilenames()
-                            ->label('Upload PAN Card'),
-                    ]),
+                //         FileUpload::make('pancard')
+                //             ->required()
+                //             ->disk('public')
+                //             ->directory('assets/uploads/documents')
+                //             ->image()
+                //             ->imageEditor()
+                //             ->imageEditorAspectRatios([
+                //                 '16:9',
+                //                 '4:3',
+                //                 '1:1',
+                //             ])
+                //             ->maxSize(512)
+                //             ->preserveFilenames()
+                //             ->label('Upload PAN Card'),
+                //     ]),
 
                 Fieldset::make('Change Password')
                     ->columns('auto-fit')
@@ -150,7 +150,6 @@ class EditProfile extends BaseEditProfile
                         $this->getPasswordFormComponent(),
                         $this->getPasswordConfirmationFormComponent(),
                     ]),
-
 
             ]);
     }
