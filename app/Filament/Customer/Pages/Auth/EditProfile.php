@@ -43,11 +43,6 @@ class EditProfile extends BaseEditProfile
                         TextInput::make('mother_last_name')
                             ->label('Mother\'s Last Name'),
 
-                        TextInput::make('label_name')
-                            ->readOnly(getCurrentCustomer()->plan == 'free')
-                            ->unique(ignoreRecord: true)
-                            ->label('Label Name'),
-
                     ]),
 
                 Fieldset::make('Address')
