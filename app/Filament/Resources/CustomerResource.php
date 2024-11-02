@@ -160,75 +160,75 @@ class CustomerResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('dob')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Date of Birth'),
+                // TextColumn::make('dob')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Date of Birth'),
 
-                TextColumn::make('father_first_name')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Father\'s First Name'),
+                // TextColumn::make('father_first_name')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Father\'s First Name'),
 
-                TextColumn::make('father_last_name')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Father\'s Last Name'),
+                // TextColumn::make('father_last_name')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Father\'s Last Name'),
 
-                TextColumn::make('mother_first_name')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Mother\'s First Name'),
+                // TextColumn::make('mother_first_name')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Mother\'s First Name'),
 
-                TextColumn::make('mother_last_name')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Mother\'s Last Name'),
+                // TextColumn::make('mother_last_name')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Mother\'s Last Name'),
 
-                TextColumn::make('address.address1')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Address Line 1'),
+                // TextColumn::make('address.address1')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Address Line 1'),
 
-                TextColumn::make('address.address2')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('Address Line 2'),
+                // TextColumn::make('address.address2')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('Address Line 2'),
 
-                TextColumn::make('address.city')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('City'),
+                // TextColumn::make('address.city')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('City'),
 
-                TextColumn::make('address.state')
-                    ->toggleable()
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->label('State'),
+                // TextColumn::make('address.state')
+                //     ->toggleable()
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->label('State'),
 
-                TextColumn::make('address.country')
-                    ->searchable()
-                    ->sortable()
-                    ->placeholder('N/A')
-                    ->toggleable()
-                    ->label('Country'),
+                // TextColumn::make('address.country')
+                //     ->searchable()
+                //     ->sortable()
+                //     ->placeholder('N/A')
+                //     ->toggleable()
+                //     ->label('Country'),
 
                 TextInputColumn::make('wallet_balance')
                     ->rules(['numeric', 'gte:0'])
