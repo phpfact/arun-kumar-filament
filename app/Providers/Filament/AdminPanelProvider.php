@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset(settings('logo')))
             ->brandLogoHeight('4rem')
             ->maxContentWidth(MaxWidth::Full)
+            ->databaseNotifications()
             ->profile(isSimple: false)
             // ->colors([
             //     'primary' => Color::hex('#115cff'),

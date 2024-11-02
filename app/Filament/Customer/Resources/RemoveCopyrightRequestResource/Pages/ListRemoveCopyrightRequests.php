@@ -31,10 +31,10 @@ class ListRemoveCopyrightRequests extends ListRecords
     {
         return [
             'all' => Tab::make('All Claim')->icon('heroicon-m-list-bullet')->badge(RemoveCopyrightRequest::query()->count()),
-            'pending' => Tab::make('Pending Claim')->icon('heroicon-m-exclamation-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))->badge(RemoveCopyrightRequest::query()->where('status', 'pending')->count()),
-            'processing' => Tab::make('Processing Claim')->icon('heroicon-m-exclamation-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'processing'))->badge(RemoveCopyrightRequest::query()->where('status', 'processing')->count()),
-            'completed' => Tab::make('Approved Claim')->icon('heroicon-m-check-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed'))->badge(RemoveCopyrightRequest::query()->where('status', 'completed')->count()),
-            'cancelled' => Tab::make('Rejected Claim')->icon('heroicon-m-x-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'cancelled'))->badge(RemoveCopyrightRequest::query()->where('status', 'cancelled')->count()),
+            'pending' => Tab::make('Pending Claim')->icon('heroicon-m-exclamation-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))->badge(RemoveCopyrightRequest::query()->where('status', 'pending')->where('customer_id', getCurrentCustomer()->id)->count()),
+            'processing' => Tab::make('Processing Claim')->icon('heroicon-m-exclamation-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'processing'))->badge(RemoveCopyrightRequest::query()->where('status', 'processing')->where('customer_id', getCurrentCustomer()->id)->count()),
+            'completed' => Tab::make('Approved Claim')->icon('heroicon-m-check-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed'))->badge(RemoveCopyrightRequest::query()->where('status', 'completed')->where('customer_id', getCurrentCustomer()->id)->count()),
+            'cancelled' => Tab::make('Rejected Claim')->icon('heroicon-m-x-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'cancelled'))->badge(RemoveCopyrightRequest::query()->where('status', 'cancelled')->where('customer_id', getCurrentCustomer()->id)->count()),
         ];
     }
 

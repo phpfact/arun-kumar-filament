@@ -40,13 +40,12 @@ class CustomerPanelProvider extends PanelProvider
             ->id('customer')
             ->path('customer')
             ->login()
-            ->registration(Register::class)
+            // ->registration(Register::class)
             ->passwordReset()
             ->colors([
                 'primary' => Color::Amber,
             ])
             // ->brandLogo(asset('assets/images/resources/logo/favicon.png'))
-            ->databaseNotifications()
             ->brandLogo(asset(settings('logo')))
             ->favicon(asset(settings('logo')))
             ->brandLogoHeight('4rem')

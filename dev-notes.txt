@@ -12,18 +12,6 @@ job_batches
 -------------------------------
 
 
-https://youtu.be/85uRvsUvwJQ?si=KSHtbe7JFe7-dxf-
-
-php artisan make:filament-exporter CustomerSongResource
-
-app/Filament/Exports/CustomerSongResourceExporter.php
 
 
-
-https://filamentphp.com/docs/3.x/actions/prebuilt-actions/export
-
--------------------------------
-
-
-
-
+ 
