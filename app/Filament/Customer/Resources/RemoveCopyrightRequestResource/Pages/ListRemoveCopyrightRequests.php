@@ -30,7 +30,7 @@ class ListRemoveCopyrightRequests extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('All Claim')->icon('heroicon-m-list-bullet')->badge(RemoveCopyrightRequest::query()->count()),
+            'all' => Tab::make('All Claim')->icon('heroicon-m-list-bullet')->badge(RemoveCopyrightRequest::query()->where('customer_id', getCurrentCustomer()->id)->count()),
             'pending' => Tab::make('Pending Claim')->icon('heroicon-m-exclamation-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending'))->badge(RemoveCopyrightRequest::query()->where('status', 'pending')->where('customer_id', getCurrentCustomer()->id)->count()),
             'processing' => Tab::make('Processing Claim')->icon('heroicon-m-exclamation-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'processing'))->badge(RemoveCopyrightRequest::query()->where('status', 'processing')->where('customer_id', getCurrentCustomer()->id)->count()),
             'completed' => Tab::make('Approved Claim')->icon('heroicon-m-check-circle')->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed'))->badge(RemoveCopyrightRequest::query()->where('status', 'completed')->where('customer_id', getCurrentCustomer()->id)->count()),
