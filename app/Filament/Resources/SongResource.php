@@ -1307,7 +1307,6 @@ public static function form(Form $form): Form
                 ->searchable()
                 ->label('Song Name'),
 
-
                 TextColumn::make('artists_id')
                 ->label('Artists Name')
                 ->placeholder('N/A')
