@@ -40,57 +40,57 @@ class CustomerResource extends Resource
                         TextInput::make('last_name')
                             ->label('Last Name'),
 
-                        TextInput::make('label_name')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->label('Label Name'),
+                        // TextInput::make('label_name')
+                        //     ->required()
+                        //     ->unique(ignoreRecord: true)
+                        //     ->label('Label Name'),
 
-                        TextInput::make('father_first_name')
-                            ->label('Father\'s First Name'),
+                        // TextInput::make('father_first_name')
+                        //     ->label('Father\'s First Name'),
 
-                        TextInput::make('father_last_name')
-                            ->label('Father\'s Last Name'),
+                        // TextInput::make('father_last_name')
+                        //     ->label('Father\'s Last Name'),
 
-                        TextInput::make('mother_first_name')
-                            ->label('Mother\'s First Name'),
+                        // TextInput::make('mother_first_name')
+                        //     ->label('Mother\'s First Name'),
 
-                        TextInput::make('mother_last_name')
-                            ->label('Mother\'s Last Name'),
+                        // TextInput::make('mother_last_name')
+                        //     ->label('Mother\'s Last Name'),
 
-                        Select::make('plan')
-                            ->selectablePlaceholder(false)
-                            ->options([
-                                'free' => 'Free',
-                                'gold' => 'Gold',
-                            ])
+                        // Select::make('plan')
+                        //     ->selectablePlaceholder(false)
+                        //     ->options([
+                        //         'free' => 'Free',
+                        //         'gold' => 'Gold',
+                        //     ])
 
                     ]),
 
-                Fieldset::make('Address')
-                    ->relationship('address')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('address1')
-                            ->label('Address Line 1'),
+                // Fieldset::make('Address')
+                //     ->relationship('address')
+                //     ->columns(2)
+                //     ->schema([
+                //         TextInput::make('address1')
+                //             ->label('Address Line 1'),
 
-                        TextInput::make('address2')
-                            ->label('Address Line 2'),
+                //         TextInput::make('address2')
+                //             ->label('Address Line 2'),
 
-                        Grid::make(3)
-                            ->schema([
-                                TextInput::make('city')
-                                    ->label('City'),
+                //         Grid::make(3)
+                //             ->schema([
+                //                 TextInput::make('city')
+                //                     ->label('City'),
 
-                                TextInput::make('state')
-                                    ->label('State'),
+                //                 TextInput::make('state')
+                //                     ->label('State'),
 
-                                TextInput::make('country')
-                                    ->formatStateUsing(fn ($state) => $state ?? "India")
-                                    ->readOnly()
-                                    ->label('Country'),
+                //                 TextInput::make('country')
+                //                     ->formatStateUsing(fn ($state) => $state ?? "India")
+                //                     ->readOnly()
+                //                     ->label('Country'),
 
-                            ]),
-                    ]),
+                //             ]),
+                //     ]),
 
                 Fieldset::make('Contact Details')
                     ->columns(2)
@@ -104,6 +104,7 @@ class CustomerResource extends Resource
                             ->label('Whatsapp Number'),
 
                         TextInput::make('email')
+                            ->required()
                             ->email(),
 
                         TextInput::make('password')
