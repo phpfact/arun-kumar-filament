@@ -28,6 +28,12 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Notifications\Notification;
+
+use Illuminate\Support\Facades\Storage;
+use App\Notifications\SongDownloadNotification;
+use ZipArchive;
+
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\SongResource\Pages;
@@ -1498,14 +1504,46 @@ public static function form(Form $form): Form
                 ]),
             ])
             ->headerActions([
-                Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\AdminSongResourceExporter::class)
+                Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\AdminSongResourceExporter::class),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                 ]),
-                ExportBulkAction::make()->exporter(\App\Filament\Exports\AdminSongResourceExporter::class)
+                ExportBulkAction::make()->exporter(\App\Filament\Exports\AdminSongResourceExporter::class),
+
+                // Tables\Actions\BulkAction::make('download_songs')
+                //     ->label('Download Song')
+                //     ->icon('heroicon-o-arrow-path')
+                //     ->action(function (array $recordIds, callable $get) {
+                //         // Fetch the selected records using their IDs
+                //         $records = \App\Models\Song::whereIn('id', $recordIds)->get();
+            
+                //         // Create a ZIP archive with selected songs
+                //         $zipFileName = 'downloads/songs_' . time() . '.zip';
+                //         $zip = new \ZipArchive;
+                //         $zip->open(storage_path("app/public/{$zipFileName}"), \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+            
+                //         foreach ($records as $record) {
+                //             $songPath = storage_path('app/public/' . $record->song_path); // Adjust path as needed
+                //             if (file_exists($songPath)) {
+                //                 $zip->addFile($songPath, basename($songPath));
+                //             }
+                //         }
+            
+                //         $zip->close();
+            
+                //         // Send notification with the ZIP download link
+                //         auth()->user()->notify(new \App\Notifications\SongDownloadNotification("storage/{$zipFileName}"));
+            
+                //         Notification::make()
+                //             ->title('Songs Download Ready')
+                //             ->success()
+                //             ->send();
+                //     }),
+
             ]);
+            
     }
 
     public static function getRelations(): array

@@ -19,10 +19,12 @@ use App\Filament\Resources\LabelResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
 use App\Filament\Resources\CustomerResource;
+use App\Filament\Resources\AnalyticsResource;
 use App\Filament\Resources\VideoSongResource;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Resources\ArtistChannelResource;
+use App\Filament\Resources\BankAccountResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -67,7 +69,9 @@ class AdminPanelProvider extends PanelProvider
                     ...RemoveCopyrightRequestResource::getNavigationItems(),
                     // ...ArtistChannelResource::getNavigationItems(),
                     ...Setting::getNavigationItems(),
-                    ...LabelResource::getNavigationItems()
+                    ...LabelResource::getNavigationItems(),
+                    ...AnalyticsResource::getNavigationItems(),
+                    ...BankAccountResource::getNavigationItems()
                 ]);
             })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
