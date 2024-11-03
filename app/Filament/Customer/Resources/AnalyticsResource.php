@@ -59,7 +59,7 @@ class AnalyticsResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->where('customer_id', Auth::guard('customer')->user()->id))
             ->columns([
 
-                Tables\Columns\TextColumn::make('analytic_date')->dateTime('M Y')->label('Analytic Date'),
+                Tables\Columns\TextColumn::make('analytic_date')->dateTime('d F Y')->label('Analytic Date'),
 
                 TextColumn::make('file_name')
                 ->formatStateUsing(function ($state) {
