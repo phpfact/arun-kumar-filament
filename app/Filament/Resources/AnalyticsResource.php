@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\AnalyticsResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AnalyticsResource\RelationManagers;
+use Filament\Forms\Components\Select;
 
 class AnalyticsResource extends Resource
 {
@@ -38,19 +39,82 @@ class AnalyticsResource extends Resource
                         return "{$record->first_name} {$record->last_name} ({$record->email})";
                     }),
 
-                    DatePicker::make('analytic_date')->native(false)->default(now()->format('Y-m-d')),
+                    Select::make('reports_month_name')->searchable()->options([
+                        'january' => 'January',
+                        'february' => 'February',
+                        'march' => 'March',
+                        'april' => 'April',
+                        'may' => 'May',
+                        'june' => 'June',
+                        'july' => 'July',
+                        'august' => 'August',
+                        'september' => 'September',
+                        'october' => 'October',
+                        'november' => 'November',
+                        'december' => 'December',
+                    ]),
 
-                    FileUpload::make('file_name')->columnSpanFull()
-                    ->label('Analytics Attachment')
+                    Select::make('reports_year_name')
+                    ->label('Select Year')
+                    ->searchable()
+                    ->options(
+                        collect(range(2020, 2050))->mapWithKeys(function ($year) {
+                            return [$year => $year];
+                        })
+                    )
+                    ->default(date('Y'))
+                    ->required(),
+
+                    DatePicker::make('analytic_date')->label('Reports Update Date')->native(false)->default(now()->format('Y-m-d')),
+
+                    Forms\Components\TextInput::make('reporting_stores')->required()->datalist([
+                        'Spotify',
+                        'Apple Music',
+                        'Amazon Music',
+                        'YouTube Music',
+                        'Deezer',
+                        'Tidal',
+                        'Twitch',
+                        'SoundCloud',
+                        'Pandora',
+                        'iHeartRadio',
+                        'Anghami',
+                        'Qobuz',
+                        'Napster',
+                        'Beatport',
+                        'Facebook Music & Instagram Music',
+                        'Gaana',
+                        'JioSaavn',
+                        'Hungama',
+                        'Wynk Music',
+                        'TikTok',
+                        'Reliance Jio CRBT',
+                        'Bharti Airtel CRBT',
+                        'Vodafone Idea (Vi) CRBT',
+                        'BSNL CRBT',
+                        'MTNL CRBT',
+                        'Telenor India CRBT',
+                    ]),
+
+                    Forms\Components\TextInput::make('Label Name')->required(),
+
+                    FileUpload::make('file_name')
+                    ->columnSpanFull()
+                    ->label('Royalty Reports')
                     ->disk('public')
                     ->directory('uploads/analytic')
-                    ->acceptedFileTypes(['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'])
-                    ->rules(['mimes:csv,xls,xlsx'])
+                    ->acceptedFileTypes([
+                        'text/csv', 
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/pdf'
+                    ])
+                    ->rules(['mimes:csv,xls,xlsx,pdf', 'max:204800'])
                     ->validationMessages([
-                        'mimes' => 'Please upload only .csv, .xls, or .xlsx file.',
+                        'mimes' => 'Please upload only .csv, .xls, .xlsx, or .pdf files.',
                         'max' => 'The file must not be greater than 200 MB.'
                     ])
-                    ->required()
+                    ->required(),
 
                 ])->columns(2), 
 

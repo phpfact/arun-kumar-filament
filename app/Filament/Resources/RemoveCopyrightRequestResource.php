@@ -13,6 +13,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\ExportBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\RemoveCopyrightRequestResource\Pages;
 use App\Filament\Resources\RemoveCopyrightRequestResource\RelationManagers;
@@ -87,14 +88,14 @@ class RemoveCopyrightRequestResource extends Resource
                     ->preload()
                     ->label('Requested By'),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->headerActions([
+                Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\AdminRemoveCopyrightRequestResourceExporter::class),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
                 ]),
+                ExportBulkAction::make()->exporter(\App\Filament\Exports\AdminRemoveCopyrightRequestResourceExporter::class),
             ]);
     }
 
