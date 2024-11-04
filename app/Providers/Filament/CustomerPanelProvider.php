@@ -33,6 +33,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use App\Filament\Customer\Resources\RemoveCopyrightRequestResource;
+use App\Filament\Customer\Resources\SongResource\Widgets\LatestSongs;
 
 class CustomerPanelProvider extends PanelProvider
 {
@@ -81,6 +82,7 @@ class CustomerPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 StatsOverview::class,
+                LatestSongs::class
             ])
             ->middleware([
                 EncryptCookies::class,
