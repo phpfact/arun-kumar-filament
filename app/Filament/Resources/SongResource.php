@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use ZipArchive;
 use Filament\Forms;
 use App\Models\Song;
 use Filament\Tables;
@@ -19,8 +20,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -29,14 +32,11 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notification;
-
-use Illuminate\Support\Facades\Storage;
-use App\Notifications\SongDownloadNotification;
-use ZipArchive;
-
+use Filament\Notifications\Notification as NotificationBar;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\SongResource\Pages;
+use App\Notifications\SongDownloadNotification;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SongResource\RelationManagers;
 
@@ -1512,37 +1512,91 @@ public static function form(Form $form): Form
                 ]),
                 ExportBulkAction::make()->exporter(\App\Filament\Exports\AdminSongResourceExporter::class),
 
-                // Tables\Actions\BulkAction::make('download_songs')
-                //     ->label('Download Song')
-                //     ->icon('heroicon-o-arrow-path')
-                //     ->action(function (array $recordIds, callable $get) {
-                //         // Fetch the selected records using their IDs
-                //         $records = \App\Models\Song::whereIn('id', $recordIds)->get();
-            
-                //         // Create a ZIP archive with selected songs
-                //         $zipFileName = 'downloads/songs_' . time() . '.zip';
-                //         $zip = new \ZipArchive;
-                //         $zip->open(storage_path("app/public/{$zipFileName}"), \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-            
-                //         foreach ($records as $record) {
-                //             $songPath = storage_path('app/public/' . $record->song_path); // Adjust path as needed
-                //             if (file_exists($songPath)) {
-                //                 $zip->addFile($songPath, basename($songPath));
-                //             }
-                //         }
-            
-                //         $zip->close();
-            
-                //         // Send notification with the ZIP download link
-                //         auth()->user()->notify(new \App\Notifications\SongDownloadNotification("storage/{$zipFileName}"));
-            
-                //         Notification::make()
-                //             ->title('Songs Download Ready')
-                //             ->success()
-                //             ->send();
-                //     }),
+                BulkAction::make('Download Song')
+                ->label('Download Song')
+                ->icon('heroicon-o-arrow-down')
+                ->color('success')
+                ->action(function ($records) {
+                    $paths = $records->pluck('song_path')->toArray();
+                    $zipFileName = "songs_zip_" . uniqid() . ".zip";
+                    $tempZipPath = storage_path("app/public/{$zipFileName}");
+                    
+                    // Create a new ZipArchive instance
+                    $zip = new ZipArchive();
+                    if ($zip->open($tempZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                        foreach ($paths as $path) {
+                            $zip->addFile($path, basename($path));
+                        }
+                        $zip->close();
+                    } else {
+                        return NotificationBar::make()
+                            ->title('Zip Creation Failed')
+                            ->body('There was an error creating your zip file.')
+                            ->danger()
+                            ->send();
+                    }
+
+                    // Notify the user that the zip file is ready for download
+                    NotificationBar::make()
+                        ->title('Your zip file is ready!')
+                        ->body('Click the link below to download your zipped songs.')
+                        ->success()
+                        ->send();
+
+                    // Return a redirect response to download the file
+                    return response()->download($tempZipPath)->deleteFileAfterSend(true);
+                }),
+
+
+
+                BulkAction::make('Download Artwork')
+                ->label('Download Artwork')
+                ->icon('heroicon-o-arrow-down')
+                ->color('warning')
+                ->action(function ($records) {
+                    $paths = $records->pluck('cover_photo')->toArray();
+                    $zipFileName = "cover_photo_zip_" . uniqid() . ".zip";
+                    $tempZipPath = storage_path("app/public/{$zipFileName}");
+                    
+                    // Create a new ZipArchive instance
+                    $zip = new ZipArchive();
+                    if ($zip->open($tempZipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                        foreach ($paths as $path) {
+                            $zip->addFile($path, basename($path));
+                        }
+                        $zip->close();
+                    } else {
+                        return NotificationBar::make()
+                            ->title('Zip Creation Failed')
+                            ->body('There was an error creating your zip file.')
+                            ->danger()
+                            ->send();
+                    }
+
+                    // Notify the user that the zip file is ready for download
+                    NotificationBar::make()
+                        ->title('Your zip file is ready!')
+                        ->body('Click the link below to download your zipped cover photo.')
+                        ->success()
+                        ->send();
+
+                    // Return a redirect response to download the file
+                    return response()->download($tempZipPath)->deleteFileAfterSend(true);
+                }),
+
+
 
             ]);
+
+
+
+
+
+
+
+
+
+
             
     }
 

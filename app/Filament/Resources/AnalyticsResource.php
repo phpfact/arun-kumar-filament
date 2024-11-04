@@ -4,11 +4,13 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Label;
 use Filament\Forms\Form;
 use App\Models\Analytics;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
@@ -17,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\AnalyticsResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AnalyticsResource\RelationManagers;
-use Filament\Forms\Components\Select;
 
 class AnalyticsResource extends Resource
 {
@@ -33,11 +34,23 @@ class AnalyticsResource extends Resource
                 Section::make('Analytics Details')
                 ->schema([
 
-                    Forms\Components\Select::make('customer_id')->required()->preload()
+                    // Forms\Components\Select::make('customer_id')->required()->preload()
+                    // ->relationship('customer', 'email')
+                    // ->getOptionLabelFromRecordUsing(function ($record) {
+                    //     return "{$record->first_name} {$record->last_name} ({$record->email})";
+                    // }),
+
+                    Select::make('customer_id')
+                    ->label('Customer')
                     ->relationship('customer', 'email')
+                    ->required()
+                    ->preload()
+                    ->reactive() // Make this field reactive
                     ->getOptionLabelFromRecordUsing(function ($record) {
                         return "{$record->first_name} {$record->last_name} ({$record->email})";
                     }),
+
+                    DatePicker::make('analytic_date')->label('Reports Update Date')->native(false)->default(now()->format('Y-m-d')),
 
                     Select::make('reports_month_name')->searchable()->options([
                         'january' => 'January',
@@ -52,20 +65,18 @@ class AnalyticsResource extends Resource
                         'october' => 'October',
                         'november' => 'November',
                         'december' => 'December',
-                    ]),
+                    ])->label('Reports Month Name'),
 
                     Select::make('reports_year_name')
-                    ->label('Select Year')
+                    ->label('Reports Year')
                     ->searchable()
                     ->options(
-                        collect(range(2020, 2050))->mapWithKeys(function ($year) {
+                        collect(range(2020, 2099))->mapWithKeys(function ($year) {
                             return [$year => $year];
                         })
                     )
                     ->default(date('Y'))
                     ->required(),
-
-                    DatePicker::make('analytic_date')->label('Reports Update Date')->native(false)->default(now()->format('Y-m-d')),
 
                     Forms\Components\TextInput::make('reporting_stores')->required()->datalist([
                         'Spotify',
@@ -96,7 +107,27 @@ class AnalyticsResource extends Resource
                         'Telenor India CRBT',
                     ]),
 
-                    Forms\Components\TextInput::make('Label Name')->required(),
+                    // Forms\Components\TextInput::make('Label Name')->required(),
+
+                    // Select::make('label_id')
+                    // ->label('Label')
+                    // ->required()
+                    // ->native(false)
+                    // ->options(function ($record) {
+                    //     return Label::where('customer_id', $record->customer_id)->where('status', '1')->pluck('title', 'id');
+                    // }),
+
+                    Select::make('label_id')
+                    ->label('Label')
+                    ->required()
+                    ->native(false)
+                    ->options(function (callable $get) {
+                        $customerId = $get('customer_id');
+                        if (!$customerId) {
+                            return [];
+                        }
+                        return Label::where('customer_id', $customerId)->where('status', '1')->pluck('title', 'id');
+                    }),
 
                     FileUpload::make('file_name')
                     ->columnSpanFull()
@@ -128,12 +159,14 @@ class AnalyticsResource extends Resource
                 Tables\Columns\TextColumn::make('customer.first_name')->label('Customer Name'),
                 Tables\Columns\TextColumn::make('customer.email')->label('Customer Email'),
 
-                Tables\Columns\TextColumn::make('analytic_date')->dateTime('M Y')->label('Analytic Date'),
-
+                Tables\Columns\TextColumn::make('analytic_date')->dateTime('d F Y')->label('Reports Update Date'),
+                Tables\Columns\TextColumn::make('reports_month_name')->getStateUsing(fn ($record) => ucwords($record->reports_month_name) . ' ' . $record->reports_year_name)->label('Reports Month/Year'),
+                Tables\Columns\TextColumn::make('reporting_stores')->label('Reporting Stores'),
+                Tables\Columns\TextColumn::make('label.title')->label('Label'),
                 TextColumn::make('file_name')
                 ->formatStateUsing(function ($state) {
                     $excel_path = asset($state);
-                    $html = '<a href="' . $excel_path . '" download class="download-btn">Download Excel</a>';
+                    $html = '<a href="' . $excel_path . '" download class="download-btn">Download Report</a>';
                     $html .= '<style>.download-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 24px;font-size:14px;font-weight:600;color:#854d0e;background-color:#fef9c3;border:2px solid #facc15;border-radius:8px;text-decoration:none;transition:.2s ease-in-out;box-shadow:0 2px 4px rgba(250,204,21,.2)}.download-btn:hover{background-color:#fde047;border-color:#eab308;color:#713f12;transform:translateY(-1px);box-shadow:0 4px 6px rgba(234,179,8,.25)}.download-btn:active{background-color:#facc15;transform:translateY(0);box-shadow:0 1px 2px rgba(234,179,8,.2)}.download-btn:focus{outline:0;box-shadow:0 0 0 3px rgba(250,204,21,.4)}</style>';
                     return new HtmlString($html);
                 })

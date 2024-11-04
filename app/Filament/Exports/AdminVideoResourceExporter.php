@@ -21,10 +21,14 @@ class AdminVideoResourceExporter extends Exporter
             }),
             ExportColumn::make('publisher')->label('Lyricists Name'),
             ExportColumn::make('composer')->label('Music/Composer'),
-            ExportColumn::make('instagram')->label('Instagram'),
+            ExportColumn::make('produser_name')->label('Produser Name'),
             ExportColumn::make('label.title')->label('Song Label'),
+            ExportColumn::make('instagram')->label('Singer Instagram Handle'),
             ExportColumn::make('release_date')->label('Release Date'),
             ExportColumn::make('languages')->label('Song Languages'),
+            ExportColumn::make('music_genre')->label('Music Genre'),
+            ExportColumn::make('music_sub_genre')->label('Music Sub-Genre'),
+            ExportColumn::make('music_mood')->label('Music Mood'),
             ExportColumn::make('stream_store')->label('All Music Streaming Store')->state(function ($record): string {
                 return $record->stream_store == 1 ? 'Yes' : 'No';
             }),
@@ -46,7 +50,6 @@ class AdminVideoResourceExporter extends Exporter
                 }
                 return 'No';
             }),
-            
             ExportColumn::make('isrc_code')->label('ISRC Code'),
             ExportColumn::make('cover_photo')->label('Artwork')->state(function ($record): string {
                 return basename($record->cover_photo);
@@ -54,12 +57,6 @@ class AdminVideoResourceExporter extends Exporter
             ExportColumn::make('video_path')->label('Song')->state(function ($record): string {
                 return basename($record->video_path);
             }),
-
-            // ExportColumn::make('music_genre')->label('Primary Genre'),
-            // ExportColumn::make('music_sub_genre')->label('Sub-Genre'),
-            // ExportColumn::make('music_mood')->label('Mood/Feel'),
-            // ExportColumn::make('status')->label('Status'),
-
         ];
     }
 
