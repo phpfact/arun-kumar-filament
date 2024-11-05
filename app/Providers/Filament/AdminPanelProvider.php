@@ -16,15 +16,18 @@ use App\Filament\Resources\RoleResource;
 use App\Filament\Resources\SongResource;
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\LabelResource;
+use App\Filament\Resources\WalletResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
 use App\Filament\Resources\CustomerResource;
 use App\Filament\Resources\AnalyticsResource;
 use App\Filament\Resources\VideoSongResource;
+use App\Filament\Resources\BankAccountResource;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Resources\ArtistChannelResource;
-use App\Filament\Resources\BankAccountResource;
+use App\Filament\Resources\WithdrawRequestResource;
+use App\Filament\Resources\WalletTransactionResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -71,7 +74,10 @@ class AdminPanelProvider extends PanelProvider
                     ...Setting::getNavigationItems(),
                     ...LabelResource::getNavigationItems(),
                     ...AnalyticsResource::getNavigationItems(),
-                    ...BankAccountResource::getNavigationItems()
+                    ...BankAccountResource::getNavigationItems(),
+                    // ...WalletResource::getNavigationItems(),
+                    ...WalletTransactionResource::getNavigationItems(),
+                    ...WithdrawRequestResource::getNavigationItems(),
                 ]);
             })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
