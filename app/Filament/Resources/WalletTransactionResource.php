@@ -50,9 +50,11 @@ class WalletTransactionResource extends Resource
                 ->label('Amount')
                 ->rules([
                     fn ($get) => function (string $attribute, $value, $fail) use($get){
-                        $customer = Customer::find($get('customer_id'));
-                        if ($value > $customer->wallet_balance && $get('type') == 'withdraw') {
-                            $fail('The amount must be less than or equal to '.$customer->wallet_balance.'.');
+                        if($get('customer_id')){
+                            $customer = Customer::find($get('customer_id'));
+                            if ($value > $customer->wallet_balance && $get('type') == 'withdraw') {
+                                $fail('The amount must be less than or equal to '.$customer->wallet_balance.'.');
+                            }
                         }
                     },
                 ]),
