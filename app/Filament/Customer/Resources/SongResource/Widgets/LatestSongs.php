@@ -19,6 +19,7 @@ class LatestSongs extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
+            ->paginated(false)
             ->modifyQueryUsing(fn ($query) => $query->where('customer_id', getCurrentCustomer()->id)->limit(10))
             ->query(SongResource::getEloquentQuery())
             ->defaultPaginationPageOption(10)
