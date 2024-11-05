@@ -1130,7 +1130,26 @@ class VideoSongResource extends Resource
                         'approved' => 'success',
                         'rejected' => 'danger',
                     })
-                    ->formatStateUsing(fn ($state) => ucfirst($state)),
+                    ->formatStateUsing(fn ($state) => ucfirst($state))
+                    ->tooltip(function (TextColumn $column, $record): ?string {
+                        $state = $column->getState();
+                        
+                        if ($state === 'rejected') {
+                            return $record->reject_reason ?? 'No reason provided';
+                        }
+    
+                        return null;
+                    }),
+
+                // TextColumn::make('status')
+                //     ->badge()
+                //     ->searchable()
+                //     ->color(fn ($state) => match ($state) {
+                //         'pending' => 'warning',
+                //         'approved' => 'success',
+                //         'rejected' => 'danger',
+                //     })
+                //     ->formatStateUsing(fn ($state) => ucfirst($state)),
 
                 // TextColumn::make('reject_reason')
                 //     ->placeholder('N/A')

@@ -1409,40 +1409,24 @@ public static function form(Form $form): Form
                     ->searchable()
                     ->label('ISRC Code'),
 
-                TextColumn::make('status')
-                    ->badge()
-                    ->searchable()
-                    ->color(fn ($state) => match ($state) {
-                        'pending' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'danger',
-                    })
-                    ->formatStateUsing(fn ($state) => ucfirst($state)),
+            TextColumn::make('status')
+                ->badge()
+                ->searchable()
+                ->color(fn ($state) => match ($state) {
+                    'pending' => 'warning',
+                    'approved' => 'success',
+                    'rejected' => 'danger',
+                })
+                ->formatStateUsing(fn ($state) => ucfirst($state))
+                ->tooltip(function (TextColumn $column, $record): ?string {
+                    $state = $column->getState();
+                    
+                    if ($state === 'rejected') {
+                        return $record->reject_reason ?? 'No reason provided';
+                    }
 
-                TextColumn::make('reject_reason')
-                ->limit(50)
-    ->tooltip(function (TextColumn $column): ?string {
-        $state = $column->getState();
- 
-        if (strlen($state) <= $column->getCharacterLimit()) {
-            return null;
-        }
- 
-        // Only render the tooltip if the column content exceeds the length limit.
-        return $state;
-    })
-                    ->placeholder('N/A')
-                    ->searchable()
-                    ->label('Reject Reason'),
-
-                // TextInputColumn::make('reward')
-                //     ->disabled(fn ($record) => $record->is_added)
-                //     ->sortable()
-                //     ->rules(['numeric', 'gte:0']),
-
-                // TextColumn::make('is_added')
-                //     ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No')
-                //     ->label('Added in Wallet'),
+                    return null;
+                }),
 
                 TextColumn::make('created_at')
                     ->date('M d, Y h:i A')
