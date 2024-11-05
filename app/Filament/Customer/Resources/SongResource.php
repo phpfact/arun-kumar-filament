@@ -1118,6 +1118,7 @@ class SongResource extends Resource
         return $table
             ->modifyQueryUsing(fn ($query) => $query->where(['customer_id' => getCurrentCustomer()->id]))
             ->columns([
+
                 ImageColumn::make('cover_photo')
                     ->extraImgAttributes(['loading' => 'lazy'])
                     ->size(150)
@@ -1139,6 +1140,7 @@ class SongResource extends Resource
                 ->label('Artists Name')
                 ->placeholder('N/A')
                 ->toggleable()
+                ->searchable()
                 ->formatStateUsing(function ($record) {
                     $badges = [];
                     foreach ($record->artists_id as $id) {
@@ -1155,31 +1157,37 @@ class SongResource extends Resource
                 TextColumn::make('publisher')
                 ->toggleable()
                 ->badge()
+                ->searchable()
                 ->label('Lyricists Name'),
 
                 TextColumn::make('composer')
                 ->toggleable()
                 ->badge()
+                ->searchable()
                 ->label('Music/Composer'),
 
                 TextColumn::make('release_date')
                     ->toggleable()
+                    ->searchable()
                     ->date('M d, Y')
                     ->label('Release Date'),
 
 
                 TextColumn::make('label.title')->placeholder('N/A')
                     ->toggleable()
+                    ->searchable()
                     ->label('Label Name'),
 
 
 
                 TextColumn::make('isrc_code')
                     ->placeholder('N/A')
+                    ->searchable()
                     ->label('ISRC Code'),
 
                 TextColumn::make('status')
                     ->badge()
+                    ->searchable()
                     ->color(fn ($state) => match ($state) {
                         'pending' => 'warning',
                         'approved' => 'success',
@@ -1248,6 +1256,23 @@ class SongResource extends Resource
                     ->url(function ($record) {
                         return asset($record->report_file);
                     }, true),
+
+
+                    Action::make('view_reason')
+                    ->label('Reason for Rejection')
+                    ->visible(function ($record) {
+                        if ($record->reject_reason) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    ->icon('heroicon-o-exclamation-triangle')
+                    ->color('danger')
+                    ->modal('Reject Reason')
+                    ->modalDescription(fn($record) => $record->reject_reason)
+                    ->modalSubmitAction(false),
+                    // ->slideOver()
+                    // ->modalCancelAction(false),
 
                 Tables\Actions\EditAction::make()
                     ->visible(fn ($record) => in_array($record->status, ['rejected'])),

@@ -1300,6 +1300,24 @@ class VideoSongResource extends Resource
                     ->url(function ($record) {
                         return asset($record->report_file);
                     }, true),
+
+
+                    Action::make('view_reason')
+                    ->label('Reason for Rejection')
+                    ->visible(function ($record) {
+                        if ($record->reject_reason) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    ->icon('heroicon-o-exclamation-triangle')
+                    ->color('danger')
+                    ->modal('Reject Reason')
+                    ->modalDescription(fn($record) => $record->reject_reason)
+                    ->modalSubmitAction(false),
+                    // ->slideOver()
+                    // ->modalCancelAction(false),
+
             ])
             ->headerActions([
                 Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\AdminVideoResourceExporter::class),

@@ -1292,6 +1292,7 @@ public static function form(Form $form): Form
 
                 TextColumn::make('song_path')
                     ->toggleable()
+                    ->searchable()
                     ->formatStateUsing(function ($state) {
                         $audio_path = asset($state);
                         $html = '<audio controls src="' . $audio_path . '"></audio>';
@@ -1317,6 +1318,7 @@ public static function form(Form $form): Form
                 ->label('Artists Name')
                 ->placeholder('N/A')
                 ->toggleable()
+                ->searchable()
                 ->formatStateUsing(function ($record) {
                     $badges = [];
                     foreach ($record->artists_id as $id) {
@@ -1329,11 +1331,12 @@ public static function form(Form $form): Form
                 })
                 ->html(),
 
-                TextColumn::make('publisher')->label('Lyricists Name')->toggleable()->badge(),
+                TextColumn::make('publisher')->searchable()->label('Lyricists Name')->toggleable()->badge(),
 
                 TextColumn::make('composer')
                     ->toggleable()
                     ->badge()
+                    ->searchable()
                     ->label('Music/Composer'),
 
                 // TextColumn::make('publisher')
@@ -1357,48 +1360,58 @@ public static function form(Form $form): Form
 
                 TextColumn::make('label.title')->placeholder('N/A')
                 ->toggleable()
+                ->searchable()
                 ->label('Song Label'),
 
                 TextColumn::make('release_date')
                     ->toggleable()
                     ->date('M d, Y')
+                    ->searchable()
                     ->label('Release Date'),
 
                 TextColumn::make('languages')
                     ->toggleable()
                     ->badge()
+                    ->searchable()
                     ->label('Song Languages'),
 
                 IconColumn::make('stream_store')
                     ->toggleable()
                     ->boolean()
+                    ->searchable()
                     ->label('All Music Streaming Store'),
 
                 IconColumn::make('fb_ig_music')
                     ->toggleable()
                     ->boolean()
+                    ->searchable()
                     ->label('Facebook and Instagram Music'),
 
                 IconColumn::make('yt_content_id')
                     ->toggleable()
                     ->boolean()
+                    ->searchable()
                     ->label('YouTube Content ID'),
 
                 IconColumn::make('explicit')
                     ->toggleable()
+                    ->searchable()
                     ->boolean(),
 
                 IconColumn::make('caller_tune')
                     ->toggleable()
+                    ->searchable()
                     ->boolean()
                     ->label('Caller Tune'),
 
                 TextColumn::make('isrc_code')
                     ->placeholder('N/A')
+                    ->searchable()
                     ->label('ISRC Code'),
 
                 TextColumn::make('status')
                     ->badge()
+                    ->searchable()
                     ->color(fn ($state) => match ($state) {
                         'pending' => 'warning',
                         'approved' => 'success',
@@ -1407,7 +1420,19 @@ public static function form(Form $form): Form
                     ->formatStateUsing(fn ($state) => ucfirst($state)),
 
                 TextColumn::make('reject_reason')
+                ->limit(50)
+    ->tooltip(function (TextColumn $column): ?string {
+        $state = $column->getState();
+ 
+        if (strlen($state) <= $column->getCharacterLimit()) {
+            return null;
+        }
+ 
+        // Only render the tooltip if the column content exceeds the length limit.
+        return $state;
+    })
                     ->placeholder('N/A')
+                    ->searchable()
                     ->label('Reject Reason'),
 
                 // TextInputColumn::make('reward')
@@ -1421,10 +1446,12 @@ public static function form(Form $form): Form
 
                 TextColumn::make('created_at')
                     ->date('M d, Y h:i A')
+                    ->searchable()
                     ->label('Uploaded At'),
 
                 TextColumn::make('updated_at')
                     ->date('M d, Y h:i A')
+                    ->searchable()
                     ->label('Updated At'),
             ])
             ->filters([
@@ -1483,20 +1510,37 @@ public static function form(Form $form): Form
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Action::make('view_report')
-                    ->label('View Report')
+
+                    Action::make('view_report')
+                        ->label('View Report')
+                        ->visible(function ($record) {
+                            if ($record->report_file) {
+                                return file_exists(public_path($record->report_file));
+                            }
+                            return false;
+                        })
+                        ->icon('heroicon-o-document-chart-bar')
+                        ->color('success')
+                        ->url(function ($record) {
+                            return asset($record->report_file);
+                        }, true),
+
+                    Action::make('view_reason')
+                    ->label('Reason for Rejection')
                     ->visible(function ($record) {
-                        if ($record->report_file) {
-                            return file_exists(public_path($record->report_file));
+                        if ($record->reject_reason) {
+                            return true;
                         }
                         return false;
-                        // return $record->report_file ? true : false;
                     })
-                    ->icon('heroicon-o-document-chart-bar')
-                    ->color('success')
-                    ->url(function ($record) {
-                        return asset($record->report_file);
-                    }, true)
+                    ->icon('heroicon-o-exclamation-triangle')
+                    ->color('danger')
+                    ->modal('Reject Reason')
+                    ->modalDescription(fn($record) => $record->reject_reason)
+                    ->modalSubmitAction(false),
+                    // ->slideOver()
+                    // ->modalCancelAction(false),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

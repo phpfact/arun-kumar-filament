@@ -1042,12 +1042,14 @@ class VideoSongResource extends Resource
 
                 TextColumn::make('label.title')->placeholder('N/A')
                 ->toggleable()
+                ->searchable()
                 ->label('Label Name'),
 
                 TextColumn::make('artists_id')
                 ->label('Artists Name')
                 ->placeholder('N/A')
                 ->toggleable()
+                ->searchable()
                 ->formatStateUsing(function ($record) {
                     $badges = [];
                     foreach ($record->artists_id as $id) {
@@ -1073,11 +1075,13 @@ class VideoSongResource extends Resource
                 TextColumn::make('composer')
                     ->toggleable()
                     ->badge()
+                    ->searchable()
                     ->label('Music/Composer'),
 
                     TextColumn::make('publisher')
                     ->toggleable()
                     ->badge()
+                    ->searchable()
                     ->label('Lyricists Name'),
 
                 // TextColumn::make('publisher')
@@ -1101,6 +1105,7 @@ class VideoSongResource extends Resource
                 TextColumn::make('release_date')
                     ->toggleable()
                     ->date('M d, Y')
+                    ->searchable()
                     ->label('Song Release Date'),
 
                 // TextColumn::make('languages')
@@ -1114,10 +1119,12 @@ class VideoSongResource extends Resource
 
                 TextColumn::make('isrc_code')
                     ->placeholder('N/A')
+                    ->searchable()
                     ->label('ISRC Code'),
 
                 TextColumn::make('status')
                     ->badge()
+                    ->searchable()
                     ->color(fn ($state) => match ($state) {
                         'pending' => 'warning',
                         'approved' => 'success',
@@ -1206,6 +1213,23 @@ class VideoSongResource extends Resource
                     ->url(function ($record) {
                         return asset($record->report_file);
                     }, true),
+
+
+                    Action::make('view_reason')
+                    ->label('Reason for Rejection')
+                    ->visible(function ($record) {
+                        if ($record->reject_reason) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    ->icon('heroicon-o-exclamation-triangle')
+                    ->color('danger')
+                    ->modal('Reject Reason')
+                    ->modalDescription(fn($record) => $record->reject_reason)
+                    ->modalSubmitAction(false),
+                    // ->slideOver()
+                    // ->modalCancelAction(false),
 
                 Tables\Actions\EditAction::make()
                     ->visible(fn ($record) => in_array($record->status, ['rejected'])),
