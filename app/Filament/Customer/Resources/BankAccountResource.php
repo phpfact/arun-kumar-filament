@@ -21,6 +21,17 @@ class BankAccountResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
+    public static function canCreate(): bool
+    {
+        // Check if the current customer has at least one verified bank account
+        return !self::userHasVerifiedBankAccount();
+    }
+
+    protected static function userHasVerifiedBankAccount(): bool
+    {
+        return BankAccount::where('customer_id', Auth::guard('customer')->user()->id)->where('status', '1')->exists();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
