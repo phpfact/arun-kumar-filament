@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use App\Models\RemoveCopyrightRequest;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\ExportBulkAction;
@@ -49,6 +50,7 @@ class RemoveCopyrightRequestResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(NULL)
             ->columns([
                 TextColumn::make('song_name')
                     ->searchable()
@@ -56,11 +58,20 @@ class RemoveCopyrightRequestResource extends Resource
                     ->label('Song Name'),
 
                 TextColumn::make('yt_video_link')
-                    ->label('YouTube Video Link'),
+                ->copyable()
+                ->copyMessage('Youtube Link copied')
+                ->copyMessageDuration(1500)
+                ->icon('heroicon-m-play')
+                ->iconColor('primary')
+                ->iconPosition(IconPosition::Before)
+                ->label('YouTube Video Link'),
 
                 TextColumn::make('customer.email')
                     ->searchable()
                     ->sortable()
+                    ->icon('heroicon-m-envelope')
+                    ->iconColor('primary')
+                    ->iconPosition(IconPosition::Before)
                     ->label('Requested By'),
 
                 TextColumn::make('provider'),
