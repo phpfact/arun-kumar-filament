@@ -26,11 +26,12 @@ use App\Filament\Customer\Resources\AnalyticsResource;
 use App\Filament\Customer\Resources\VideoSongResource;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Customer\Resources\BankAccountResource;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Customer\Resources\ArtistChannelResource;
-use App\Filament\Customer\Resources\BankAccountResource;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use App\Filament\Customer\Resources\WithdrawRequestResource;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use App\Filament\Customer\Resources\RemoveCopyrightRequestResource;
 use App\Filament\Customer\Resources\SongResource\Widgets\LatestSongs;
@@ -67,7 +68,8 @@ class CustomerPanelProvider extends PanelProvider
                     ...VideoSongResource::getNavigationItems(),
                     ...RemoveCopyrightRequestResource::getNavigationItems(),
                     ...AnalyticsResource::getNavigationItems(),
-                    ...BankAccountResource::getNavigationItems()
+                    ...BankAccountResource::getNavigationItems(),
+                    ...WithdrawRequestResource::getNavigationItems()
                     // ...ArtistChannelResource::getNavigationItems(),
                     // ...RoleResource::getNavigationItems(),
                     // ...UserResource::getNavigationItems(),

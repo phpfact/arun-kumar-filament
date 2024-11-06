@@ -81,6 +81,10 @@ class RemoveCopyrightRequestResource extends Resource
                     ->label('Requested At'),
 
             ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
             ->filters([
                 SelectFilter::make('customer_id')
                     ->searchable()
@@ -99,18 +103,11 @@ class RemoveCopyrightRequestResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListRemoveCopyrightRequests::route('/'),
-            // 'create' => Pages\CreateRemoveCopyrightRequest::route('/create'),
+            'create' => Pages\CreateRemoveCopyrightRequest::route('/create'),
             // 'edit' => Pages\EditRemoveCopyrightRequest::route('/{record}/edit'),
         ];
     }

@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Customer\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Customer;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use App\Models\WithdrawRequest;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\WithdrawRequestResource\Pages;
-use App\Filament\Resources\WithdrawRequestResource\RelationManagers;
+use App\Filament\Customer\Resources\WithdrawRequestResource\Pages;
+use App\Filament\Customer\Resources\WithdrawRequestResource\RelationManagers;
+use Filament\Forms\Components\Textarea;
 
 class WithdrawRequestResource extends Resource
 {
@@ -47,15 +48,15 @@ class WithdrawRequestResource extends Resource
                     ->prefix('$')
                     ->numeric()
                     ->required()
-                    ->label('Amount'),
-                    // ->rules([
-                    //     fn ($get) => function (string $attribute, $value, $fail) use($get){
-                    //         $customer = Customer::find(getCurrentCustomer()->id);
-                    //         if ($value > $customer->wallet_balance) {
-                    //             $fail("The balance in your account is ". $customer->wallet_balance .". You cannot request a withdrawal greater than this amount.");
-                    //         }
-                    //     },
-                    // ]),
+                    ->label('Amount')
+                    ->rules([
+                        fn ($get) => function (string $attribute, $value, $fail) use($get){
+                            $customer = Customer::find(getCurrentCustomer()->id);
+                            if ($value > $customer->wallet_balance) {
+                                $fail("The balance in your account is ". $customer->wallet_balance .". You cannot request a withdrawal greater than this amount.");
+                            }
+                        },
+                    ]),
 
                     Textarea::make('customer_message')->label('Your Message')->rows(5)->cols(10)
 
@@ -67,15 +68,10 @@ class WithdrawRequestResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(NULL)
+            ->modifyQueryUsing(fn ($query) => $query->where(['customer_id' => getCurrentCustomer()->id]))
             ->columns([
-                
-                TextColumn::make('customer.full_name')
-                ->label('Customer Name')
-                ->getStateUsing(fn($record) => "{$record->customer->first_name} {$record->customer->last_name}")
-                ->description(fn($record) => $record->customer->email),
-
-                TextColumn::make('bank.customer_name')->label('Account Holder')->placeholder('N/A'),
-                TextColumn::make('amount')->label('Amount')->formatStateUsing(fn($state) => '$' . $state),
+                TextColumn::make('amount'),
                 TextColumn::make('bank.account_number')->label('Bank AC Number'),
                 TextColumn::make('bank.bank_name')->label('Bank Name'),
                 TextColumn::make('bank.ifsc_code')->label('IFSC Code'),
@@ -94,18 +90,37 @@ class WithdrawRequestResource extends Resource
 
                     return null;
                 }),
-
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                
+                // Tables\Actions\EditAction::make()
+                //     ->visible(fn ($record) => in_array($record->status, ['pending','rejected'])),
+                    
+                // Tables\Actions\DeleteAction::make()
+                //     ->visible(fn ($record) => in_array($record->status, ['pending','rejected'])),
+                
+                Action::make('view_reason')
+                ->label('Reason for Rejection')
+                ->visible(function ($record) {
+                    if ($record->reject_reason) {
+                        return true;
+                    }
+                    return false;
+                })
+                ->icon('heroicon-o-exclamation-triangle')
+                ->color('danger')
+                ->modal('Reject Reason')
+                ->modalDescription(fn($record) => $record->reject_reason)
+                ->modalSubmitAction(false),
+
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
@@ -121,7 +136,7 @@ class WithdrawRequestResource extends Resource
         return [
             'index' => Pages\ListWithdrawRequests::route('/'),
             'create' => Pages\CreateWithdrawRequest::route('/create'),
-            'edit' => Pages\EditWithdrawRequest::route('/{record}/edit'),
+            // 'edit' => Pages\EditWithdrawRequest::route('/{record}/edit'),
         ];
     }
 }

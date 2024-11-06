@@ -2,9 +2,10 @@
 
 namespace App\Filament\Customer\Resources\SongResource\Pages;
 
-use App\Filament\Customer\Resources\SongResource;
 use Filament\Actions;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Customer\Resources\SongResource;
 
 class EditSong extends EditRecord
 {
@@ -25,7 +26,7 @@ class EditSong extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['status'] = 'pending';
-        $data['reject_reason'] = '';
+        $data['reject_reason'] = NULL;
         return $data;
     }
 

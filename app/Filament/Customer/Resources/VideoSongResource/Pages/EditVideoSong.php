@@ -16,4 +16,17 @@ class EditVideoSong extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['status'] = 'pending';
+        $data['reject_reason'] = NULL;
+        return $data;
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
 }

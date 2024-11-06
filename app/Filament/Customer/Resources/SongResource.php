@@ -1314,7 +1314,7 @@ class SongResource extends Resource
         return [
             'index' => Pages\ListSongs::route('/'),
             'create' => Pages\CreateSong::route('/create'),
-            // 'edit' => Pages\EditSong::route('/{record}/edit'),
+            'edit' => Pages\EditSong::route('/{record}/edit'),
         ];
     }
 }

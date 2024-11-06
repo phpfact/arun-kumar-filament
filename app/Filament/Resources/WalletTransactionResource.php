@@ -44,7 +44,7 @@ class WalletTransactionResource extends Resource
                 ]),
 
                 TextInput::make('amount')
-                ->prefix('Rs.')
+                ->prefix('$')
                 ->numeric()
                 ->required()
                 ->label('Amount')
@@ -72,7 +72,7 @@ class WalletTransactionResource extends Resource
             ->columns([
                 TextColumn::make('customer.first_name')->label('Name'),
                 TextColumn::make('customer.email')->label('Customer Mail'),
-                TextColumn::make('amount')->prefix('Rs.')->label('Amount'),
+                TextColumn::make('amount')->prefix('$ ')->label('Amount'),
                 TextColumn::make('type')->label('Transaction Type'),
             ])
             ->filters([

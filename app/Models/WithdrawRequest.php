@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class WithdrawRequest extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function bank(){
+        return $this->belongsTo(BankAccount::class);
+    }
+
 }

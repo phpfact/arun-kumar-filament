@@ -272,7 +272,8 @@ class BankAccountResource extends Resource
                         ->maxLength(100),
         
                     Forms\Components\TextInput::make('customer_name')
-                        ->label('Your Name on ATM card')
+                        ->label('Account Holder Name')
+                        ->required()
                         ->placeholder('Optional')
                         ->maxLength(100),
         

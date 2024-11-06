@@ -9,4 +9,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateVideoSong extends CreateRecord
 {
     protected static string $resource = VideoSongResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+    
 }
