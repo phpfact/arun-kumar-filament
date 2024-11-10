@@ -16,18 +16,31 @@ class CreateWalletTransaction extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
     
-    protected function handleRecordCreation( array $data ): Model
+    protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // dd($data); 
-        $customer = Customer::find( $data['customer_id'] );
-        if($customer){
-            if($data['type'] == 'deposit'){
-                $customer->wallet_balance += $data['amount'];
-            }else{
-                $customer->wallet_balance -= $data['amount'];
-            }
-            $customer->save();
-        }
-        return static::getModel()::create( $data );
+        $data['transaction_id'] = strtoupper(uniqid());
+        return $data;
     }
+
+    // protected function handleRecordCreation( array $data ): Model
+    // {
+    //     $customer = Customer::find( $data['customer_id'] );
+    //     if($customer){
+    //         if($data['type'] == 'deposit'){
+    //             $customer->wallet_balance += $data['amount'];
+    //         }else{
+    //             $customer->wallet_balance -= $data['amount'];
+    //         }
+    //         $customer->save();
+    //     }
+    //     return static::getModel()::create( $data );
+    // }
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        $transaction = static::getModel()::create($data);
+        refreshWallet($data['customer_id']);
+        return $transaction;
+    }
+
 }

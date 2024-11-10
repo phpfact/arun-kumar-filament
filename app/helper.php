@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Settings;
+use App\Models\WalletTransaction;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -35,6 +36,31 @@ if (!function_exists('updateWallet')) {
         }
     }
 }
+
+
+if (!function_exists('refreshWallet')) {
+    function refreshWallet($customer_id = NULL)
+    {
+        // Get all wallet transactions for the customer
+        $WalletTransactions = WalletTransaction::where(['customer_id' => $customer_id])->get();
+
+        // Initialize WalletBalance as a string to ensure precision
+        $WalletBalance = '0.00';
+        
+        foreach ($WalletTransactions as $WalletTransaction) {
+            // Check transaction type and update the balance accordingly
+            if ($WalletTransaction['type'] === 'deposit') {
+                $WalletBalance = bcadd($WalletBalance, $WalletTransaction['amount'], 2);
+            } elseif ($WalletTransaction['type'] === 'withdraw') {
+                $WalletBalance = bcsub($WalletBalance, $WalletTransaction['amount'], 2);
+            }
+        }
+
+        Customer::find($customer_id)->update(['wallet_balance'=> (float)$WalletBalance]);
+
+    }
+}
+
 
 if (!function_exists('truncateString')) {
     function truncateString($string, $length = 30, $append = '...')

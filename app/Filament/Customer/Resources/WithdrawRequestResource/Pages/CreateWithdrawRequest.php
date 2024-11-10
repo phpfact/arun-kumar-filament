@@ -2,9 +2,10 @@
 
 namespace App\Filament\Customer\Resources\WithdrawRequestResource\Pages;
 
-use App\Filament\Customer\Resources\WithdrawRequestResource;
 use Filament\Actions;
+use App\Models\WithdrawRequest;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Customer\Resources\WithdrawRequestResource;
 
 class CreateWithdrawRequest extends CreateRecord
 {
@@ -20,5 +21,18 @@ class CreateWithdrawRequest extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    // protected function mutateFormDataBeforeCreate(array $data): array
+    // {
+    //     // Check if there's already a pending request for this customer
+    //     $existingRequest = WithdrawRequest::where('customer_id', getCurrentCustomer()->id)->where('status', 'pending')->first();
+    //     if ($existingRequest) {
+    //         throw new \Exception('You already have a pending withdrawal request. Please wait until it is processed before making another request.');
+    //     }
+
+
+    //     $data['customer_id'] = getCurrentCustomer()->id;
+    //     return $data;
+    // }
 
 }

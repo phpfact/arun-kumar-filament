@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+
+    // dd(  refreshWallet( 1 )  );
+
+
     // return redirect()->route('home');
     return redirect('admin');
 });

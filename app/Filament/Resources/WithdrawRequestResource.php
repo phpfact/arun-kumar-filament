@@ -7,17 +7,21 @@ use Filament\Tables;
 use App\Models\Customer;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\BankAccount;
 use App\Models\WithdrawRequest;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\HTML;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\WithdrawRequestResource\Pages;
 use App\Filament\Resources\WithdrawRequestResource\RelationManagers;
+use Filament\Forms\Components\Hidden;
 
 class WithdrawRequestResource extends Resource
 {
@@ -29,37 +33,58 @@ class WithdrawRequestResource extends Resource
     {
         return $form
             ->schema([
-                
+
                 Section::make('Withdrawal Request')
                 ->description('Please enter the amount you wish to withdraw. Ensure it does not exceed the balance available in your account.')
                 ->schema([
 
-                    Select::make('bank_id')
-                    ->required()
-                    ->preload()
-                    ->native(false)
-                    ->relationship('bank', 'account_number', fn ($query) => $query->where(['status'=>1, 'customer_id'=>getCurrentCustomer()->id]))
-                    ->getOptionLabelFromRecordUsing(function ($record) {
-                        return "Bank: {$record->bank_name}, Account Number: {$record->account_number}, IFSC Code: {$record->ifsc_code}";
-                    }),
+                    Forms\Components\ViewField::make('bank_details')->columnSpanFull()->label('Bank Details')
+                    ->view('filament.resources.withdraw-request-resource.bank-details'),
+
+                    Hidden::make('customer_id'),
+
+                    // Select::make('bank_id')
+                    // ->required()
+                    // ->preload()
+                    // ->native(false)
+                    // ->relationship('bank', 'account_number', function ($query, $get) {
+                    //     $customerId = $get('customer_id');
+                    //     refreshWallet($customerId);
+                    //     $query->where(['status' => 1, 'customer_id' => $customerId]);
+                    // })
+                    // ->getOptionLabelFromRecordUsing(function ($record) {
+                    //     return "Bank: {$record->bank_name}, Account Number: {$record->account_number}, IFSC Code: {$record->ifsc_code}";
+                    // }),
 
                     TextInput::make('amount')
                     ->prefix('$')
                     ->numeric()
                     ->required()
-                    ->label('Amount'),
-                    // ->rules([
-                    //     fn ($get) => function (string $attribute, $value, $fail) use($get){
-                    //         $customer = Customer::find(getCurrentCustomer()->id);
-                    //         if ($value > $customer->wallet_balance) {
-                    //             $fail("The balance in your account is ". $customer->wallet_balance .". You cannot request a withdrawal greater than this amount.");
-                    //         }
-                    //     },
-                    // ]),
+                    ->label('Amount')
+                    ->rules([
+                        fn ($get) => function (string $attribute, $value, $fail) use ($get) {
+                            $customerId = $get('customer_id');
+                            if ($customerId) {
+                                $customer = Customer::find($customerId);
+                                if ($customer && $value > $customer->wallet_balance) {
+                                    $fail("The available balance in the bank account is $ " . $customer->wallet_balance . ". You cannot approve a withdrawal that exceeds this amount.");
+                                }
+                            } else {
+                                $fail("Customer ID is missing.");
+                            }
+                        },
+                    ]),
 
-                    Textarea::make('customer_message')->label('Your Message')->rows(5)->cols(10)
+                    Select::make('status')->required()->live()->selectablePlaceholder(false)
+                    ->options([
+                        'pending' => 'Pending',
+                        'approved' => 'Approved',
+                        'rejected' => 'Rejected',
+                    ]),
 
-                ])
+                    Textarea::make('remark')->required()->columnSpanFull()->label('Your Remark')->rows(5)->cols(10)
+
+                ])->columns(2)
 
             ]);
     }
@@ -103,9 +128,9 @@ class WithdrawRequestResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 

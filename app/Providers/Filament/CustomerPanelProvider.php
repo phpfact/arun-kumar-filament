@@ -33,6 +33,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Filament\Customer\Resources\WithdrawRequestResource;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use App\Filament\Customer\Resources\WalletTransactionResource;
 use App\Filament\Customer\Resources\RemoveCopyrightRequestResource;
 use App\Filament\Customer\Resources\SongResource\Widgets\LatestSongs;
 
@@ -69,7 +70,8 @@ class CustomerPanelProvider extends PanelProvider
                     ...RemoveCopyrightRequestResource::getNavigationItems(),
                     ...AnalyticsResource::getNavigationItems(),
                     ...BankAccountResource::getNavigationItems(),
-                    ...WithdrawRequestResource::getNavigationItems()
+                    ...WithdrawRequestResource::getNavigationItems(),
+                    ...WalletTransactionResource::getNavigationItems()
                     // ...ArtistChannelResource::getNavigationItems(),
                     // ...RoleResource::getNavigationItems(),
                     // ...UserResource::getNavigationItems(),

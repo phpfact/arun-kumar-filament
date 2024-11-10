@@ -18,19 +18,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Customer\Resources\WithdrawRequestResource\Pages;
 use App\Filament\Customer\Resources\WithdrawRequestResource\RelationManagers;
+use Exception;
 use Filament\Forms\Components\Textarea;
 
 class WithdrawRequestResource extends Resource
 {
     protected static ?string $model = WithdrawRequest::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Payment Withdraw';
+
+    protected static ?string $modelLabel = 'Payment Withdraw';
+
+    protected static ?string $pluralModelLabel = 'Payment Withdraws';
+
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     public static function form(Form $form): Form
     {
+        // Refresh Wallet Balance
+        refreshWallet(getCurrentCustomer()->id);
+
         return $form
             ->schema([
-                
+
                 Section::make('Withdrawal Request')
                 ->description('Please enter the amount you wish to withdraw. Ensure it does not exceed the balance available in your account.')
                 ->schema([
@@ -53,7 +63,7 @@ class WithdrawRequestResource extends Resource
                         fn ($get) => function (string $attribute, $value, $fail) use($get){
                             $customer = Customer::find(getCurrentCustomer()->id);
                             if ($value > $customer->wallet_balance) {
-                                $fail("The balance in your account is ". $customer->wallet_balance .". You cannot request a withdrawal greater than this amount.");
+                                $fail("The balance in your account is ".'$'.$customer->wallet_balance .". You cannot request a withdrawal greater than this amount.");
                             }
                         },
                     ]),
