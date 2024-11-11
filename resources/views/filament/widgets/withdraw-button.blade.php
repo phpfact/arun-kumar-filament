@@ -11,12 +11,16 @@
     </a>
 
     <!-- Conditional Withdraw Button -->
-    @if($walletBalance > 0)
+    
         <button 
             type="button" 
             class="ml-4 px-4 py-2 bg-white text-black border border-black rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-white dark:hover:bg-gray-700"
-            onclick="window.location.href='{{ url('customer/withdraw-requests/create') }}'">
+
+@if($walletBalance > 0)
+            onclick="window.location.href='{{ url('customer/withdraw-requests/create') }}'"
+@endif
+            >
             Withdraw
         </button>
-    @endif
+
 </div>

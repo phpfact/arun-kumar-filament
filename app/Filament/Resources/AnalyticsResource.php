@@ -44,6 +44,7 @@ class AnalyticsResource extends Resource
                     ->label('Customer')
                     ->relationship('customer', 'email')
                     ->required()
+                    ->searchable()
                     ->preload()
                     ->reactive() // Make this field reactive
                     ->getOptionLabelFromRecordUsing(function ($record) {

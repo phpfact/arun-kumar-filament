@@ -37,11 +37,15 @@ class WalletTransactionResource extends Resource
                 ->schema([
 
                     Select::make('customer_id')
+                    ->label('Customer')
                     ->relationship('customer', 'email')
+                    ->required()
                     ->searchable()
                     ->preload()
-                    ->label('Select Customer')
-                    ->required(),
+                    ->reactive() // Make this field reactive
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        return "{$record->first_name} {$record->last_name} ({$record->email})";
+                    }),
 
                     TextInput::make('amount')
                     ->prefix('$')
