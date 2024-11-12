@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
+class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -767,6 +767,10 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Filament\\Customer\\Pages\\Auth\\EditProfile' => __DIR__ . '/../..' . '/app/Filament/Customer/Pages/Auth/EditProfile.php',
         'App\\Filament\\Customer\\Pages\\Auth\\Register' => __DIR__ . '/../..' . '/app/Filament/Customer/Pages/Auth/Register.php',
+        'App\\Filament\\Customer\\Resources\\AnalyticsResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/AnalyticsResource.php',
+        'App\\Filament\\Customer\\Resources\\AnalyticsResource\\Pages\\CreateAnalytics' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/AnalyticsResource/Pages/CreateAnalytics.php',
+        'App\\Filament\\Customer\\Resources\\AnalyticsResource\\Pages\\EditAnalytics' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/AnalyticsResource/Pages/EditAnalytics.php',
+        'App\\Filament\\Customer\\Resources\\AnalyticsResource\\Pages\\ListAnalytics' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/AnalyticsResource/Pages/ListAnalytics.php',
         'App\\Filament\\Customer\\Resources\\ArtistChannelResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/ArtistChannelResource.php',
         'App\\Filament\\Customer\\Resources\\ArtistChannelResource\\Pages\\CreateArtistChannel' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/ArtistChannelResource/Pages/CreateArtistChannel.php',
         'App\\Filament\\Customer\\Resources\\ArtistChannelResource\\Pages\\EditArtistChannel' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/ArtistChannelResource/Pages/EditArtistChannel.php',
@@ -775,6 +779,10 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
         'App\\Filament\\Customer\\Resources\\ArtistsResource\\Pages\\CreateArtists' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/ArtistsResource/Pages/CreateArtists.php',
         'App\\Filament\\Customer\\Resources\\ArtistsResource\\Pages\\EditArtists' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/ArtistsResource/Pages/EditArtists.php',
         'App\\Filament\\Customer\\Resources\\ArtistsResource\\Pages\\ListArtists' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/ArtistsResource/Pages/ListArtists.php',
+        'App\\Filament\\Customer\\Resources\\BankAccountResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/BankAccountResource.php',
+        'App\\Filament\\Customer\\Resources\\BankAccountResource\\Pages\\CreateBankAccount' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/BankAccountResource/Pages/CreateBankAccount.php',
+        'App\\Filament\\Customer\\Resources\\BankAccountResource\\Pages\\EditBankAccount' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/BankAccountResource/Pages/EditBankAccount.php',
+        'App\\Filament\\Customer\\Resources\\BankAccountResource\\Pages\\ListBankAccounts' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/BankAccountResource/Pages/ListBankAccounts.php',
         'App\\Filament\\Customer\\Resources\\LabelResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/LabelResource.php',
         'App\\Filament\\Customer\\Resources\\LabelResource\\Pages\\CreateLabel' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/LabelResource/Pages/CreateLabel.php',
         'App\\Filament\\Customer\\Resources\\LabelResource\\Pages\\EditLabel' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/LabelResource/Pages/EditLabel.php',
@@ -787,16 +795,36 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
         'App\\Filament\\Customer\\Resources\\SongResource\\Pages\\CreateSong' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/SongResource/Pages/CreateSong.php',
         'App\\Filament\\Customer\\Resources\\SongResource\\Pages\\EditSong' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/SongResource/Pages/EditSong.php',
         'App\\Filament\\Customer\\Resources\\SongResource\\Pages\\ListSongs' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/SongResource/Pages/ListSongs.php',
+        'App\\Filament\\Customer\\Resources\\SongResource\\Widgets\\LatestSongs' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/SongResource/Widgets/LatestSongs.php',
         'App\\Filament\\Customer\\Resources\\VideoSongResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/VideoSongResource.php',
         'App\\Filament\\Customer\\Resources\\VideoSongResource\\Pages\\CreateVideoSong' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/VideoSongResource/Pages/CreateVideoSong.php',
         'App\\Filament\\Customer\\Resources\\VideoSongResource\\Pages\\EditVideoSong' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/VideoSongResource/Pages/EditVideoSong.php',
         'App\\Filament\\Customer\\Resources\\VideoSongResource\\Pages\\ListVideoSongs' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/VideoSongResource/Pages/ListVideoSongs.php',
+        'App\\Filament\\Customer\\Resources\\WalletTransactionResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WalletTransactionResource.php',
+        'App\\Filament\\Customer\\Resources\\WalletTransactionResource\\Pages\\CreateWalletTransaction' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WalletTransactionResource/Pages/CreateWalletTransaction.php',
+        'App\\Filament\\Customer\\Resources\\WalletTransactionResource\\Pages\\EditWalletTransaction' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WalletTransactionResource/Pages/EditWalletTransaction.php',
+        'App\\Filament\\Customer\\Resources\\WalletTransactionResource\\Pages\\ListWalletTransactions' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WalletTransactionResource/Pages/ListWalletTransactions.php',
+        'App\\Filament\\Customer\\Resources\\WithdrawRequestResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WithdrawRequestResource.php',
+        'App\\Filament\\Customer\\Resources\\WithdrawRequestResource\\Pages\\CreateWithdrawRequest' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WithdrawRequestResource/Pages/CreateWithdrawRequest.php',
+        'App\\Filament\\Customer\\Resources\\WithdrawRequestResource\\Pages\\EditWithdrawRequest' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WithdrawRequestResource/Pages/EditWithdrawRequest.php',
+        'App\\Filament\\Customer\\Resources\\WithdrawRequestResource\\Pages\\ListWithdrawRequests' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/WithdrawRequestResource/Pages/ListWithdrawRequests.php',
         'App\\Filament\\Customer\\Widgets\\StatsOverview' => __DIR__ . '/../..' . '/app/Filament/Customer/Widgets/StatsOverview.php',
+        'App\\Filament\\Exports\\AdminRemoveCopyrightRequestResourceExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/AdminRemoveCopyrightRequestResourceExporter.php',
+        'App\\Filament\\Exports\\AdminSongResourceExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/AdminSongResourceExporter.php',
+        'App\\Filament\\Exports\\AdminVideoResourceExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/AdminVideoResourceExporter.php',
         'App\\Filament\\Pages\\Setting' => __DIR__ . '/../..' . '/app/Filament/Pages/Setting.php',
+        'App\\Filament\\Resources\\AnalyticsResource' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource.php',
+        'App\\Filament\\Resources\\AnalyticsResource\\Pages\\CreateAnalytics' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource/Pages/CreateAnalytics.php',
+        'App\\Filament\\Resources\\AnalyticsResource\\Pages\\EditAnalytics' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource/Pages/EditAnalytics.php',
+        'App\\Filament\\Resources\\AnalyticsResource\\Pages\\ListAnalytics' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource/Pages/ListAnalytics.php',
         'App\\Filament\\Resources\\ArtistChannelResource' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource.php',
         'App\\Filament\\Resources\\ArtistChannelResource\\Pages\\CreateArtistChannel' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource/Pages/CreateArtistChannel.php',
         'App\\Filament\\Resources\\ArtistChannelResource\\Pages\\EditArtistChannel' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource/Pages/EditArtistChannel.php',
         'App\\Filament\\Resources\\ArtistChannelResource\\Pages\\ListArtistChannels' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource/Pages/ListArtistChannels.php',
+        'App\\Filament\\Resources\\BankAccountResource' => __DIR__ . '/../..' . '/app/Filament/Resources/BankAccountResource.php',
+        'App\\Filament\\Resources\\BankAccountResource\\Pages\\CreateBankAccount' => __DIR__ . '/../..' . '/app/Filament/Resources/BankAccountResource/Pages/CreateBankAccount.php',
+        'App\\Filament\\Resources\\BankAccountResource\\Pages\\EditBankAccount' => __DIR__ . '/../..' . '/app/Filament/Resources/BankAccountResource/Pages/EditBankAccount.php',
+        'App\\Filament\\Resources\\BankAccountResource\\Pages\\ListBankAccounts' => __DIR__ . '/../..' . '/app/Filament/Resources/BankAccountResource/Pages/ListBankAccounts.php',
         'App\\Filament\\Resources\\CustomerDocumentResource' => __DIR__ . '/../..' . '/app/Filament/Resources/CustomerDocumentResource.php',
         'App\\Filament\\Resources\\CustomerDocumentResource\\Pages\\CreateCustomerDocument' => __DIR__ . '/../..' . '/app/Filament/Resources/CustomerDocumentResource/Pages/CreateCustomerDocument.php',
         'App\\Filament\\Resources\\CustomerDocumentResource\\Pages\\EditCustomerDocument' => __DIR__ . '/../..' . '/app/Filament/Resources/CustomerDocumentResource/Pages/EditCustomerDocument.php',
@@ -833,6 +861,18 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
         'App\\Filament\\Resources\\VideoSongResource\\Pages\\CreateVideoSong' => __DIR__ . '/../..' . '/app/Filament/Resources/VideoSongResource/Pages/CreateVideoSong.php',
         'App\\Filament\\Resources\\VideoSongResource\\Pages\\EditVideoSong' => __DIR__ . '/../..' . '/app/Filament/Resources/VideoSongResource/Pages/EditVideoSong.php',
         'App\\Filament\\Resources\\VideoSongResource\\Pages\\ListVideoSongs' => __DIR__ . '/../..' . '/app/Filament/Resources/VideoSongResource/Pages/ListVideoSongs.php',
+        'App\\Filament\\Resources\\WalletResource' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletResource.php',
+        'App\\Filament\\Resources\\WalletResource\\Pages\\CreateWallet' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletResource/Pages/CreateWallet.php',
+        'App\\Filament\\Resources\\WalletResource\\Pages\\EditWallet' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletResource/Pages/EditWallet.php',
+        'App\\Filament\\Resources\\WalletResource\\Pages\\ListWallets' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletResource/Pages/ListWallets.php',
+        'App\\Filament\\Resources\\WalletTransactionResource' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletTransactionResource.php',
+        'App\\Filament\\Resources\\WalletTransactionResource\\Pages\\CreateWalletTransaction' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletTransactionResource/Pages/CreateWalletTransaction.php',
+        'App\\Filament\\Resources\\WalletTransactionResource\\Pages\\EditWalletTransaction' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletTransactionResource/Pages/EditWalletTransaction.php',
+        'App\\Filament\\Resources\\WalletTransactionResource\\Pages\\ListWalletTransactions' => __DIR__ . '/../..' . '/app/Filament/Resources/WalletTransactionResource/Pages/ListWalletTransactions.php',
+        'App\\Filament\\Resources\\WithdrawRequestResource' => __DIR__ . '/../..' . '/app/Filament/Resources/WithdrawRequestResource.php',
+        'App\\Filament\\Resources\\WithdrawRequestResource\\Pages\\CreateWithdrawRequest' => __DIR__ . '/../..' . '/app/Filament/Resources/WithdrawRequestResource/Pages/CreateWithdrawRequest.php',
+        'App\\Filament\\Resources\\WithdrawRequestResource\\Pages\\EditWithdrawRequest' => __DIR__ . '/../..' . '/app/Filament/Resources/WithdrawRequestResource/Pages/EditWithdrawRequest.php',
+        'App\\Filament\\Resources\\WithdrawRequestResource\\Pages\\ListWithdrawRequests' => __DIR__ . '/../..' . '/app/Filament/Resources/WithdrawRequestResource/Pages/ListWithdrawRequests.php',
         'App\\Filament\\Widgets\\StatsOverview' => __DIR__ . '/../..' . '/app/Filament/Widgets/StatsOverview.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\LandingController' => __DIR__ . '/../..' . '/app/Http/Controllers/LandingController.php',
@@ -846,8 +886,10 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Models\\Analytics' => __DIR__ . '/../..' . '/app/Models/Analytics.php',
         'App\\Models\\ArtistChannel' => __DIR__ . '/../..' . '/app/Models/ArtistChannel.php',
         'App\\Models\\Artists' => __DIR__ . '/../..' . '/app/Models/Artists.php',
+        'App\\Models\\BankAccount' => __DIR__ . '/../..' . '/app/Models/BankAccount.php',
         'App\\Models\\Customer' => __DIR__ . '/../..' . '/app/Models/Customer.php',
         'App\\Models\\CustomerAddress' => __DIR__ . '/../..' . '/app/Models/CustomerAddress.php',
         'App\\Models\\Label' => __DIR__ . '/../..' . '/app/Models/Label.php',
@@ -858,6 +900,10 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
         'App\\Models\\Song' => __DIR__ . '/../..' . '/app/Models/Song.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\VideoSong' => __DIR__ . '/../..' . '/app/Models/VideoSong.php',
+        'App\\Models\\Wallet' => __DIR__ . '/../..' . '/app/Models/Wallet.php',
+        'App\\Models\\WalletTransaction' => __DIR__ . '/../..' . '/app/Models/WalletTransaction.php',
+        'App\\Models\\WithdrawRequest' => __DIR__ . '/../..' . '/app/Models/WithdrawRequest.php',
+        'App\\Notifications\\SongDownloadNotification' => __DIR__ . '/../..' . '/app/Notifications/SongDownloadNotification.php',
         'App\\Policies\\RolePolicy' => __DIR__ . '/../..' . '/app/Policies/RolePolicy.php',
         'App\\Policies\\UserPolicy' => __DIR__ . '/../..' . '/app/Policies/UserPolicy.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
@@ -9767,10 +9813,10 @@ class ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitdc65a4f74e28e1748899e4e83fbdf80e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef::$classMap;
 
         }, null, ClassLoader::class);
     }
