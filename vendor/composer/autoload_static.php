@@ -35,12 +35,12 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         '9261e07cd92c53dcc971c7c88c176c04' => __DIR__ . '/..' . '/danharrin/date-format-converter/src/helpers.php',
         '9720327d09ed9a4ba00c9b5071b71c7d' => __DIR__ . '/..' . '/danharrin/date-format-converter/src/standards.php',
         '2ad94ea6f6f6013119e9abcf4e302a08' => __DIR__ . '/..' . '/filament/forms/src/helpers.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'b69d5f1f95cd1ed438c038b6cbcc45b5' => __DIR__ . '/..' . '/filament/notifications/src/Testing/Autoload.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
         '89e9938b64b06cc502d7ceca69a380fe' => __DIR__ . '/..' . '/filament/filament/src/global_helpers.php',
         'ebb446bb6d02e998480945fbbb73dc64' => __DIR__ . '/..' . '/filament/filament/src/helpers.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
@@ -121,6 +121,7 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         array (
             'RyanChandler\\BladeCaptureDirective\\Database\\Factories\\' => 54,
             'RyanChandler\\BladeCaptureDirective\\' => 35,
+            'Rupadana\\FilamentAnnounce\\' => 26,
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
@@ -186,6 +187,7 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'Guava\\FilamentIconPicker\\' => 25,
             'GrahamCampbell\\ResultType\\' => 26,
         ),
         'F' => 
@@ -433,6 +435,10 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         array (
             0 => __DIR__ . '/..' . '/ryangjchandler/blade-capture-directive/src',
         ),
+        'Rupadana\\FilamentAnnounce\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rupadana/filament-announce/src',
+        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
@@ -600,6 +606,10 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'Guava\\FilamentIconPicker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guava/filament-icon-picker/src',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (
@@ -3029,6 +3039,11 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
+        'Guava\\FilamentIconPicker\\FilamentIconPickerServiceProvider' => __DIR__ . '/..' . '/guava/filament-icon-picker/src/FilamentIconPickerServiceProvider.php',
+        'Guava\\FilamentIconPicker\\Forms\\Concerns\\CanBeCacheable' => __DIR__ . '/..' . '/guava/filament-icon-picker/src/Forms/Concerns/CanBeCacheable.php',
+        'Guava\\FilamentIconPicker\\Forms\\IconPicker' => __DIR__ . '/..' . '/guava/filament-icon-picker/src/Forms/IconPicker.php',
+        'Guava\\FilamentIconPicker\\Layout' => __DIR__ . '/..' . '/guava/filament-icon-picker/src/Layout.php',
+        'Guava\\FilamentIconPicker\\Tables\\IconColumn' => __DIR__ . '/..' . '/guava/filament-icon-picker/src/Tables/IconColumn.php',
         'GuzzleHttp\\BodySummarizer' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/BodySummarizer.php',
         'GuzzleHttp\\BodySummarizerInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/BodySummarizerInterface.php',
         'GuzzleHttp\\Client' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Client.php',
@@ -8198,6 +8213,19 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
         'Ramsey\\Uuid\\Validator\\GenericValidator' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/GenericValidator.php',
         'Ramsey\\Uuid\\Validator\\ValidatorInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
+        'Rupadana\\FilamentAnnounce\\Announce' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Announce.php',
+        'Rupadana\\FilamentAnnounce\\Components\\Announcement' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Components/Announcement.php',
+        'Rupadana\\FilamentAnnounce\\Facades\\FilamentAnnounce' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Facades/FilamentAnnounce.php',
+        'Rupadana\\FilamentAnnounce\\FilamentAnnounce' => __DIR__ . '/..' . '/rupadana/filament-announce/src/FilamentAnnounce.php',
+        'Rupadana\\FilamentAnnounce\\FilamentAnnouncePlugin' => __DIR__ . '/..' . '/rupadana/filament-announce/src/FilamentAnnouncePlugin.php',
+        'Rupadana\\FilamentAnnounce\\FilamentAnnounceServiceProvider' => __DIR__ . '/..' . '/rupadana/filament-announce/src/FilamentAnnounceServiceProvider.php',
+        'Rupadana\\FilamentAnnounce\\Models\\Announcement' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Models/Announcement.php',
+        'Rupadana\\FilamentAnnounce\\Notifications\\AnnounceNotification' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Notifications/AnnounceNotification.php',
+        'Rupadana\\FilamentAnnounce\\Resources\\AnnouncementResource' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Resources/AnnouncementResource.php',
+        'Rupadana\\FilamentAnnounce\\Resources\\AnnouncementResource\\Pages\\CreateAnnouncement' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Resources/AnnouncementResource/Pages/CreateAnnouncement.php',
+        'Rupadana\\FilamentAnnounce\\Resources\\AnnouncementResource\\Pages\\ListAnnouncements' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Resources/AnnouncementResource/Pages/ListAnnouncements.php',
+        'Rupadana\\FilamentAnnounce\\Resources\\AnnouncementResource\\Pages\\ViewAnnouncement' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Resources/AnnouncementResource/Pages/ViewAnnouncement.php',
+        'Rupadana\\FilamentAnnounce\\Testing\\TestsFilamentAnnounce' => __DIR__ . '/..' . '/rupadana/filament-announce/src/Testing/TestsFilamentAnnounce.php',
         'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirective' => __DIR__ . '/..' . '/ryangjchandler/blade-capture-directive/src/BladeCaptureDirective.php',
         'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider' => __DIR__ . '/..' . '/ryangjchandler/blade-capture-directive/src/BladeCaptureDirectiveServiceProvider.php',
         'SQLite3Exception' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',

@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\LandingController;
+use App\Models\Customer;
+use Rupadana\FilamentAnnounce\Announce;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LandingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +17,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-
-
-    // dd(  refreshWallet( 1 )  );
-
-
-    // return redirect()->route('home');
     return redirect('admin');
 });
-
-// Route::get('home', [LandingController::class, 'home'])->name('home');

@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0d6a6ce297578c18765dbb3bc90227d09bdc3127',
+        'reference' => '603856212985d3747c99c07f21d277769aed0e5d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -292,6 +292,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'guava/filament-icon-picker' => array(
+            'pretty_version' => '2.2.4',
+            'version' => '2.2.4.0',
+            'reference' => 'ed309fee35e9566356d67635176af2f312fa687b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../guava/filament-icon-picker',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'guzzlehttp/guzzle' => array(
             'pretty_version' => '7.9.2',
             'version' => '7.9.2.0',
@@ -562,7 +571,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0d6a6ce297578c18765dbb3bc90227d09bdc3127',
+            'reference' => '603856212985d3747c99c07f21d277769aed0e5d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1045,8 +1054,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
@@ -1114,6 +1123,15 @@
             'replaced' => array(
                 0 => '4.7.6',
             ),
+        ),
+        'rupadana/filament-announce' => array(
+            'pretty_version' => '3.2.5',
+            'version' => '3.2.5.0',
+            'reference' => '223fc97bdee85a82a1915d296430fb441dd9e342',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../rupadana/filament-announce',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'ryangjchandler/blade-capture-directive' => array(
             'pretty_version' => 'v1.0.0',

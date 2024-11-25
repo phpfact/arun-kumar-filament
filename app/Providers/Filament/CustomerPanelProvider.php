@@ -22,6 +22,7 @@ use App\Filament\Customer\Resources\SongResource;
 use App\Filament\Customer\Resources\LabelResource;
 use App\Filament\Customer\Resources\ArtistsResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Rupadana\FilamentAnnounce\FilamentAnnouncePlugin;
 use App\Filament\Customer\Resources\AnalyticsResource;
 use App\Filament\Customer\Resources\VideoSongResource;
 use Illuminate\Session\Middleware\AuthenticateSession;
@@ -29,6 +30,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Customer\Resources\BankAccountResource;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Customer\Resources\ArtistChannelResource;
+use App\Filament\Customer\Resources\MusicResource;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Filament\Customer\Resources\WithdrawRequestResource;
@@ -55,6 +57,11 @@ class CustomerPanelProvider extends PanelProvider
             ->favicon(asset(settings('logo')))
             ->brandLogoHeight('4rem')
             ->homeUrl('/')
+            ->plugin(
+                FilamentAnnouncePlugin::make()
+                    ->pollingInterval('30s') // optional, by default it is set to null
+                    ->defaultColor(Color::Blue) // optional, by default it is set to "primary"
+            )
             ->maxContentWidth(MaxWidth::Full)
             ->profile(EditProfile::class, false)
             ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
@@ -71,7 +78,8 @@ class CustomerPanelProvider extends PanelProvider
                     ...AnalyticsResource::getNavigationItems(),
                     ...BankAccountResource::getNavigationItems(),
                     ...WithdrawRequestResource::getNavigationItems(),
-                    ...WalletTransactionResource::getNavigationItems()
+                    ...WalletTransactionResource::getNavigationItems(),
+                    ...MusicResource::getNavigationItems()
                     // ...ArtistChannelResource::getNavigationItems(),
                     // ...RoleResource::getNavigationItems(),
                     // ...UserResource::getNavigationItems(),

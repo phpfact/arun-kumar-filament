@@ -19,6 +19,7 @@ use App\Filament\Resources\LabelResource;
 use App\Filament\Resources\WalletResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
+use App\Filament\Resources\AnnounceResource;
 use App\Filament\Resources\CustomerResource;
 use App\Filament\Resources\AnalyticsResource;
 use App\Filament\Resources\VideoSongResource;
@@ -29,6 +30,7 @@ use App\Filament\Resources\ArtistChannelResource;
 use App\Filament\Resources\WithdrawRequestResource;
 use App\Filament\Resources\WalletTransactionResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Rupadana\FilamentAnnounce\FilamentAnnouncePlugin;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -52,9 +54,11 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth(MaxWidth::Full)
             ->databaseNotifications()
             ->profile(isSimple: false)
-            // ->colors([
-            //     'primary' => Color::hex('#115cff'),
-            // ])
+            ->plugin(
+                FilamentAnnouncePlugin::make()
+                    ->pollingInterval('30s') // optional, by default it is set to null
+                    ->defaultColor(Color::Blue) // optional, by default it is set to "primary"
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -78,6 +82,7 @@ class AdminPanelProvider extends PanelProvider
                     // ...WalletResource::getNavigationItems(),
                     ...WalletTransactionResource::getNavigationItems(),
                     ...WithdrawRequestResource::getNavigationItems(),
+                    ...AnnounceResource::getNavigationItems(),
                 ]);
             })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

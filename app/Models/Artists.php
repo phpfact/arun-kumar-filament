@@ -11,4 +11,14 @@ class Artists extends Model
 
     public $guarded = ['id'];
 
+    // public function releases()
+    // {
+    //     return $this->belongsToMany(Release::class, 'release_artists');
+    // }
+
+    // public function tracks()
+    // {
+    //     return $this->belongsToMany(Track::class, 'track_artists');
+    // }
+
 }
