@@ -16,6 +16,7 @@ use App\Filament\Resources\RoleResource;
 use App\Filament\Resources\SongResource;
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\LabelResource;
+use App\Filament\Resources\MusicResource;
 use App\Filament\Resources\WalletResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
@@ -83,6 +84,7 @@ class AdminPanelProvider extends PanelProvider
                     ...WalletTransactionResource::getNavigationItems(),
                     ...WithdrawRequestResource::getNavigationItems(),
                     ...AnnounceResource::getNavigationItems(),
+                    ...MusicResource::getNavigationItems()
                 ]);
             })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Customer\Resources;
+namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\Song;
@@ -11,15 +11,15 @@ use App\Models\Artists;
 use App\Models\Release;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Radio;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
-use Filament\Infolists\Components\View;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
@@ -27,11 +27,9 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Infolists\Components\TextEntry;
+use App\Filament\Resources\MusicResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Customer\Resources\MusicResource\Pages;
-use Filament\Infolists\Components\Section as InfoSection;
-use App\Filament\Customer\Resources\MusicResource\RelationManagers;
+use App\Filament\Resources\MusicResource\RelationManagers;
 
 class MusicResource extends Resource
 {
@@ -43,6 +41,18 @@ class MusicResource extends Resource
     {
         return $form
             ->schema([
+
+                Select::make('customer_id')
+                    ->relationship('customer', 'email')
+                    ->preload()
+                    ->searchable()
+                    ->live()
+                    ->disabled(fn($operation) => $operation == 'edit')
+                    ->afterStateUpdated(function($get, $set){
+                        $set('album_artists_id', null);
+                        // return null;
+                    })
+                    ->label('Customer Email'),
 
                 Wizard::make([
                     Wizard\Step::make('Release information')
@@ -76,11 +86,11 @@ class MusicResource extends Resource
                                         ->live()
                                         ->preload()
                                         ->required()
-                                        ->native(false)
+                                        ->native()
                                         ->multiple()
                                         // ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
                                         ->relationship('artists', 'name',
-                                            modifyQueryUsing: fn (Builder $query) => $query->where('customer_id', Auth::guard('customer')->user()->id),
+                                            modifyQueryUsing: fn (Builder $query, $get) => $query->where('customer_id', $get('customer_id')),
                                         )
                                         ->createOptionForm([
                                             Section::make('Create Artist')
@@ -94,7 +104,7 @@ class MusicResource extends Resource
                                                         ->directory('uploads/profile')
                                                         ->columnSpanFull(),
 
-                                                    Forms\Components\Hidden::make('customer_id')->default(Auth::guard('customer')->user()->id),
+                                                    Forms\Components\Hidden::make('customer_id')->default(fn($get) => $get('customer_id')),
                                                     Forms\Components\TextInput::make('name')->label('Artist Name')->required(),
                                                     Forms\Components\TextInput::make('spotify_id')->label('Spotify ID'),
                                                     Forms\Components\TextInput::make('apple_id')->label('Apple ID'),
@@ -115,9 +125,9 @@ class MusicResource extends Resource
                                         ->multiple()
                                         ->live()
                                         ->preload()
-                                        // ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
+                                        // ->options(fn ($get) => Artists::where('customer_id', $get('customer_id'))->pluck('name', 'id'))
                                         ->relationship('artists', 'name',
-                                            modifyQueryUsing: fn (Builder $query) => $query->where('customer_id', Auth::guard('customer')->user()->id),
+                                            modifyQueryUsing: fn (Builder $query, $get) => $query->where('customer_id', $get('customer_id')),
                                         )
                                         ->createOptionForm([
                                             Section::make('Create Artist')
@@ -131,7 +141,7 @@ class MusicResource extends Resource
                                                         ->directory('uploads/profile')
                                                         ->columnSpanFull(),
 
-                                                    Forms\Components\Hidden::make('customer_id')->default(Auth::guard('customer')->user()->id),
+                                                    Forms\Components\Hidden::make('customer_id')->default(fn($get) => $get('customer_id')),
                                                     Forms\Components\TextInput::make('name')->label('Artist Name')->required(),
                                                     Forms\Components\TextInput::make('spotify_id')->label('Spotify ID'),
                                                     Forms\Components\TextInput::make('apple_id')->label('Apple ID'),
@@ -167,7 +177,7 @@ class MusicResource extends Resource
                                         ->label('Label Name')
                                         ->required()
                                         ->native(false)
-                                        ->options(Label::where('customer_id', Auth::guard('customer')->user()->id)->where('status', '1')->pluck('title', 'id')),
+                                        ->options(fn($get) => Label::where('customer_id', $get('customer_id'))->where('status', '1')->pluck('title', 'id')),
 
                                     Select::make('album_release_type')
                                         ->label('Release Type')
@@ -228,7 +238,8 @@ class MusicResource extends Resource
                                                 ->required()
                                                 ->native(false)
                                                 ->multiple()
-                                                ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
+                                                // ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
+                                                ->options(fn($get) => Artists::where('customer_id', $get('../../customer_id'))->pluck('name', 'id'))
                                                 ->createOptionForm([
                                                     Section::make('Create Artist')
                                                         ->schema([
@@ -241,7 +252,7 @@ class MusicResource extends Resource
                                                                 ->directory('uploads/profile')
                                                                 ->columnSpanFull(),
 
-                                                            Forms\Components\Hidden::make('customer_id')->default(Auth::guard('customer')->user()->id),
+                                                            Forms\Components\Hidden::make('customer_id')->default(fn($get) => $get('../../customer_id')),
 
                                                             Forms\Components\TextInput::make('name')->label('Artist Name')->required(),
                                                             Forms\Components\TextInput::make('spotify_id')->label('Spotify ID'),
@@ -261,7 +272,8 @@ class MusicResource extends Resource
                                                 ->label('Featuring')
                                                 ->native(false)
                                                 ->multiple()
-                                                ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
+                                                // ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
+                                                ->options(fn ($get) => Artists::where('customer_id', $get('../../customer_id'))->pluck('name', 'id'))
                                                 ->createOptionForm([
                                                     Section::make('Create Artist')
                                                         ->schema([
@@ -274,7 +286,7 @@ class MusicResource extends Resource
                                                                 ->directory('uploads/profile')
                                                                 ->columnSpanFull(),
 
-                                                            Forms\Components\Hidden::make('customer_id')->default(Auth::guard('customer')->user()->id),
+                                                            Forms\Components\Hidden::make('customer_id')->default(fn($get)=>$get('../../customer_id')),
 
                                                             Forms\Components\TextInput::make('name')->label('Artist Name')->required(),
                                                             Forms\Components\TextInput::make('spotify_id')->label('Spotify ID'),
@@ -425,16 +437,96 @@ class MusicResource extends Resource
                                 ->defaultItems(1)
                                 ->columns(3),
 
-                        ])
+                            ]),
 
-                    // Wizard\Step::make('Billing')
-                    //     ->schema([
-                    //         // ...
-                    //     ]),
+                            Wizard\Step::make('Music Streaming Stores')
+                            ->schema([
+                                Section::make('')
+                                    ->schema([
+                                        TextInput::make('spotify_link')
+                                            ->label('Spotify Link')
+                                            ->url()
+                                            ->placeholder('Enter Spotify Link'),
+                        
+                                        TextInput::make('apple_music_link')
+                                            ->label('Apple Music Link')
+                                            ->url()
+                                            ->placeholder('Enter Apple Music Link'),
+                        
+                                        TextInput::make('gaana_link')
+                                            ->label('Gaana Link')
+                                            ->url()
+                                            ->placeholder('Enter Gaana Link'),
+                        
+                                        TextInput::make('jiosaavn_link')
+                                            ->label('JioSaavn Link')
+                                            ->url()
+                                            ->placeholder('Enter JioSaavn Link'),
+                        
+                                        TextInput::make('hungama_link')
+                                            ->label('Hungama Link')
+                                            ->url()
+                                            ->placeholder('Enter Hungama Link'),
+                        
+                                        TextInput::make('youtube_music_link')
+                                            ->label('YouTube Music Link')
+                                            ->url()
+                                            ->placeholder('Enter YouTube Music Link'),
+                        
+                                        TextInput::make('instagram_music_link')
+                                            ->label('Instagram Music Link')
+                                            ->url()
+                                            ->placeholder('Enter Instagram Music Link'),
+                        
+                                        TextInput::make('amazon_music_link')
+                                            ->label('Amazon Music Link')
+                                            ->url()
+                                            ->placeholder('Enter Amazon Music Link'),
+                        
+                                        TextInput::make('itunes_link')
+                                            ->label('iTunes Link')
+                                            ->url()
+                                            ->placeholder('Enter iTunes Link'),
+                        
+                                        TextInput::make('boomplay_link')
+                                            ->label('Boomplay Link')
+                                            ->url()
+                                            ->placeholder('Enter Boomplay Link'),
+
+                                            Section::make('')
+                                            ->schema([
+
+                                                Grid::make(2)
+                                                ->schema([
+                                                    TextInput::make('isrc_code')
+                                                        ->label('ISRC Code'),
+        
+                                                    Select::make('status')
+                                                        ->required()
+                                                        ->live()
+                                                        ->selectablePlaceholder(false)
+                                                        ->options([
+                                                            'pending' => 'Pending',
+                                                            'approved' => 'Approved',
+                                                            'rejected' => 'Rejected',
+                                                        ]),
+        
+                                                    Textarea::make('reject_reason')
+                                                        ->columnSpanFull()
+                                                        ->required()
+                                                        ->visible(fn ($get) => $get('status') == 'rejected')
+                                                        ->label('Reject Reason'),
+                                                ]),
+
+                                            ]),
+
+                                    ])
+                                    ->columns(2) // Displays fields in two columns
+                            ]),
 
                 ])
                 ->columnSpanFull()
-                // ->skippable()
+                ->skippable()
 
             ]);
     }
@@ -444,18 +536,13 @@ class MusicResource extends Resource
         return $table
             ->columns([
 
-                ImageColumn::make('album_cover_photo')->extraImgAttributes(['loading' => 'lazy'])->size(150)->toggleable()->label('Artwork')->openUrlInNewTab()
+                ImageColumn::make('album_cover_photo')->extraImgAttributes(['loading' => 'lazy'])->size(150)->toggleable()->label('Artwork')
                 ->url(function ($record) {
                     return asset($record->album_cover_photo);
-                }),
+                })
+                ->openUrlInNewTab(),
 
-                Tables\Columns\TextColumn::make('album_title')->searchable()->label('Album Name'),
-
-                Tables\Columns\TextColumn::make('artists.name')->searchable()->label('Artist Name'),
-
-                Tables\Columns\TextColumn::make('track.full_name')->searchable()->label('Label Name'),
-
-                Tables\Columns\TextColumn::make('album_upc_ean')->searchable()->label(' UPC/EAN'),
+                Tables\Columns\TextColumn::make('album_title')->searchable()->label('Album'),
 
                 Tables\Columns\TextColumn::make('album_release_type')
                 ->label('Release Type')
@@ -476,26 +563,6 @@ class MusicResource extends Resource
                 ->searchable(),
 
                 Tables\Columns\TextColumn::make('album_catalogue_number')->label('Catalogue Number'),
-
-                TextColumn::make('status')
-                ->badge()
-                ->searchable()
-                ->color(fn ($state) => match ($state) {
-                    'pending' => 'warning',
-                    'approved' => 'success',
-                    'rejected' => 'danger',
-                })
-                ->formatStateUsing(fn ($state) => ucfirst($state))
-                ->tooltip(function (TextColumn $column, $record): ?string {
-                    $state = $column->getState();
-                    
-                    if ($state === 'rejected') {
-                        return $record->reject_reason ?? 'No reason provided';
-                    }
-
-                    return null;
-                }),
-
             ])
             ->filters([
                 //
@@ -511,108 +578,6 @@ class MusicResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        $record = $infolist->getRecord(); // Get the current record
-
-        return $infolist
-            ->schema([
-                InfoSection::make('Media')
-                    ->description('Images used in the page layout.')
-                    ->schema([
-                        // Spotify Link with Image
-                        View::make('components.image-label')
-                        ->label('')
-                        ->viewData([
-                            'src' => asset('icon_images/Spotify-Logo.wine.png'),
-                            'alt' => 'Spotify',
-                            'link' => $record->spotify_link
-                        ]),
-
-                        // Apple Music Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/Apple_Music.png'),
-                                'alt' => 'Apple Music',
-                                'link' => $record->apple_music_link
-                            ]),
-
-                        // Gaana Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/Gaana.png'), 
-                                'alt' => 'Gaana',
-                                'link' => $record->gaana_link
-                            ]),
-
-                        // JioSaavn Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/JioSaavn.png'),
-                                'alt' => 'JioSaavn',
-                                'link' => $record->jiosaavn_link
-                            ]),
-
-                        // Hungama Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/Hungama.png'),
-                                'alt' => 'Hungama',
-                                'link' => $record->hungama_link
-                            ]),
-
-                        // YouTube Music Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/YouTube_Music.png'),
-                                'alt' => 'YouTube Music',
-                                'link' => $record->youtube_music_link
-                            ]),
-
-                        // Instagram Music Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/Instagram_Music.png'),
-                                'alt' => 'Instagram Music',
-                                'link' => $record->instagram_music_link
-                            ]),
-
-                        // Amazon Music Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/Amazon_Music.png'),
-                                'alt' => 'Amazon Music',
-                                'link' => $record->amazon_music_link
-                            ]),
-
-                        // iTunes Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/iTunes.png'),
-                                'alt' => 'iTunes',
-                                'link' => $record->itunes_link
-                            ]),
-
-                        // Boomplay Link with Image
-                        View::make('components.image-label')
-                            ->label('')
-                            ->viewData([
-                                'src' => asset('icon_images/Boomplay.png'),
-                                'alt' => 'Boomplay',
-                                'link' => $record->boomplay_link
-                            ]),
-                    ])->columns(2)
-            ]);
-    }
-
     public static function getRelations(): array
     {
         return [
@@ -625,7 +590,7 @@ class MusicResource extends Resource
         return [
             'index' => Pages\ListMusic::route('/'),
             'create' => Pages\CreateMusic::route('/create'),
-            'view' => Pages\ViewMusic::route('/{record}'),
+            'view' => Pages\CreateMusic::route('/record'),
             'edit' => Pages\EditMusic::route('/{record}/edit'),
         ];
     }

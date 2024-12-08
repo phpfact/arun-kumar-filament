@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Label;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Release extends Model
 {
@@ -20,7 +21,12 @@ class Release extends Model
 
     public function track()
     {
-        return $this->hasOne(Track::class);
+        return $this->hasOne(Label::class, 'id');
+    }
+
+    public function label()
+    {
+        return $this->belongsTo(Label::class);
     }
 
     public function tracks()
@@ -36,6 +42,11 @@ class Release extends Model
     public function artists()
     {
         return $this->belongsToMany(Artists::class, 'release_artist');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'release_artist');
     }
 
 }

