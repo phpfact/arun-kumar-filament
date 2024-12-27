@@ -52,6 +52,9 @@ class MusicResource extends Resource
                         $set('album_artists_id', null);
                         // return null;
                     })
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        return "{$record->first_name} {$record->last_name} ({$record->email})";
+                    })
                     ->label('Customer Email'),
 
                 Wizard::make([
