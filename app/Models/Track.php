@@ -21,7 +21,9 @@ class Track extends Model
         'composer' => 'array',
         'producer' => 'array',
         'artists_id' => 'array',
-        'featuring_artists_id' => 'array'
+        'featuring_artists_id' => 'array',
+        'caller_tune_name' => 'array',
+        'caller_tune_duration' => 'array',
     ];
 
     // public function release()

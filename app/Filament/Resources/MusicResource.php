@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Radio;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
@@ -35,7 +36,11 @@ class MusicResource extends Resource
 {
     protected static ?string $model = Release::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Audio Release';
+
+    protected static ?string $pluralModelLabel = 'Audio Releases';
+
+    protected static ?string $navigationIcon = 'heroicon-o-folder-open';
 
     public static function form(Form $form): Form
     {
@@ -80,7 +85,8 @@ class MusicResource extends Resource
                                         ->acceptedFileTypes(['image/jpeg'])
                                         ->maxSize(20 * 1024)
                                         ->required()
-                                        ->helperText('Upload 3000 x 3000 pixels Size and Max 20MB.'),
+                                        ->helperText('Upload 3000 x 3000 pixels Size and Max 20MB.')
+                                        ->downloadable(),
 
                                     TextInput::make('album_title')->required()->label('Album title'),
 
@@ -92,7 +98,7 @@ class MusicResource extends Resource
                                         ->native()
                                         ->multiple()
                                         // ->options(Artists::where('customer_id', Auth::guard('customer')->user()->id)->pluck('name', 'id'))
-                                        ->relationship('artists', 'name',
+                                        ->relationship('release_primary_artist', 'name',
                                             modifyQueryUsing: fn (Builder $query, $get) => $query->where('customer_id', $get('customer_id')),
                                         )
                                         ->createOptionForm([
@@ -105,7 +111,8 @@ class MusicResource extends Resource
                                                         ->maxSize(20 * 1024)
                                                         ->disk('public')
                                                         ->directory('uploads/profile')
-                                                        ->columnSpanFull(),
+                                                        ->columnSpanFull()
+                                                        ->downloadable(),
 
                                                     Forms\Components\Hidden::make('customer_id')->default(fn($get) => $get('customer_id')),
                                                     Forms\Components\TextInput::make('name')->label('Artist Name')->required(),
@@ -142,7 +149,8 @@ class MusicResource extends Resource
                                                         ->maxSize(20 * 1024)
                                                         ->disk('public')
                                                         ->directory('uploads/profile')
-                                                        ->columnSpanFull(),
+                                                        ->columnSpanFull()
+                                                        ->downloadable(),
 
                                                     Forms\Components\Hidden::make('customer_id')->default(fn($get) => $get('customer_id')),
                                                     Forms\Components\TextInput::make('name')->label('Artist Name')->required(),
@@ -219,6 +227,22 @@ class MusicResource extends Resource
 
                                 ])->columns(3),
 
+                                Section::make('Album Additional Options')
+                                ->schema([
+                                    Toggle::make('stream_store')
+                                    ->onColor('success')
+                                    ->label('All Music Streaming Store'),
+
+                                    Toggle::make('youtube_music')
+                                        ->onColor('success')
+                                        ->label('YouTube Music'),
+
+                                    Toggle::make('yt_content_id')
+                                        ->onColor('success')
+                                        ->label('YouTube Content ID'),
+
+                                ])->columns(3),
+
                         ]),
 
                     Wizard\Step::make('Track')
@@ -253,7 +277,8 @@ class MusicResource extends Resource
                                                                 ->maxSize(20 * 1024)
                                                                 ->disk('public')
                                                                 ->directory('uploads/profile')
-                                                                ->columnSpanFull(),
+                                                                ->columnSpanFull()
+                                                                ->downloadable(),
 
                                                             Forms\Components\Hidden::make('customer_id')->default(fn($get) => $get('../../customer_id')),
 
@@ -287,7 +312,8 @@ class MusicResource extends Resource
                                                                 ->maxSize(20 * 1024)
                                                                 ->disk('public')
                                                                 ->directory('uploads/profile')
-                                                                ->columnSpanFull(),
+                                                                ->columnSpanFull()
+                                                                ->downloadable(),
 
                                                             Forms\Components\Hidden::make('customer_id')->default(fn($get)=>$get('../../customer_id')),
 
@@ -405,6 +431,40 @@ class MusicResource extends Resource
                                     Section::make('')
                                     ->schema([
 
+                                        Toggle::make('explicit')->onColor('success'),
+
+                                        Select::make('instagram')
+                                        ->label('Singer Instagram Handle')
+                                        ->required()
+                                        ->native(false)
+                                        ->options(
+                                            Artists::where('customer_id', Auth::guard('customer')->user()->id)->get()->mapWithKeys(function ($artist) {
+                                                return [
+                                                    $artist->instagram => $artist->instagram . ' - (' . $artist->name . ')',
+                                                ];
+                                            })
+                                        ),
+
+                                        Toggle::make('caller_tune')->live()->onColor('success')->label('Caller Tune'),
+
+                                        Grid::make(2)->visible(fn ($get) => $get('caller_tune'))->schema([
+                                            TagsInput::make('caller_tune_name')
+                                                ->required()
+                                                ->placeholder(NULL)
+                                                ->label('Caller Tune Name'),
+
+                                            TagsInput::make('caller_tune_duration')
+                                                ->suffix('seconds')
+                                                ->placeholder(NULL)
+                                                ->required()
+                                                ->label('Caller Tune Duration'),
+                                        ]),
+
+                                    ])->columns(3),
+
+                                    Section::make('')
+                                    ->schema([
+
                                         FileUpload::make('song_path')
                                         ->label('Upload Song')
                                         ->disk('public')
@@ -418,6 +478,7 @@ class MusicResource extends Resource
                                         ->maxSize(2000 * 1024)
                                         ->required()
                                         ->columnSpanFull()
+                                        ->downloadable()
 
                                     ])->columns(1)
 
@@ -534,18 +595,31 @@ class MusicResource extends Resource
             ]);
     }
 
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
 
-                ImageColumn::make('album_cover_photo')->extraImgAttributes(['loading' => 'lazy'])->size(150)->toggleable()->label('Artwork')
+                ImageColumn::make('album_cover_photo')->extraImgAttributes(['loading' => 'lazy'])->size(150)->toggleable()->label('Artwork')->openUrlInNewTab()
                 ->url(function ($record) {
                     return asset($record->album_cover_photo);
-                })
-                ->openUrlInNewTab(),
+                }),
 
-                Tables\Columns\TextColumn::make('album_title')->searchable()->label('Album'),
+                Tables\Columns\TextColumn::make('album_title')->searchable()->label('Album Name'),
+
+                // Tables\Columns\TextColumn::make('artists.name')->searchable()->label('Artist Name'),
+                Tables\Columns\TextColumn::make('release_primary_artist.name')->searchable()->label('Artist Name'),
+
+                // Tables\Columns\TextColumn::make('track.title')->searchable()->label('Label Name'),
+
+                Tables\Columns\TextColumn::make('album_label_id')->searchable()->formatStateUsing(function($record){
+                    return Label::find($record->album_label_id)->title ?? '';
+               })->label('Label Name'),
+
+                Tables\Columns\TextColumn::make('album_upc_ean')->searchable()->label(' UPC/EAN'),
+                
+                Tables\Columns\TextColumn::make('isrc_code')->searchable()->label(' ISRC Code'),
 
                 Tables\Columns\TextColumn::make('album_release_type')
                 ->label('Release Type')
@@ -566,13 +640,34 @@ class MusicResource extends Resource
                 ->searchable(),
 
                 Tables\Columns\TextColumn::make('album_catalogue_number')->label('Catalogue Number'),
+
+                TextColumn::make('status')
+                ->badge()
+                ->searchable()
+                ->color(fn ($state) => match ($state) {
+                    'pending' => 'warning',
+                    'approved' => 'success',
+                    'rejected' => 'danger',
+                })
+                ->formatStateUsing(fn ($state) => ucfirst($state))
+                ->tooltip(function (TextColumn $column, $record): ?string {
+                    $state = $column->getState();
+                    
+                    if ($state === 'rejected') {
+                        return $record->reject_reason ?? 'No reason provided';
+                    }
+
+                    return null;
+                }),
+
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
@@ -580,6 +675,7 @@ class MusicResource extends Resource
                 // ]),
             ]);
     }
+
 
     public static function getRelations(): array
     {

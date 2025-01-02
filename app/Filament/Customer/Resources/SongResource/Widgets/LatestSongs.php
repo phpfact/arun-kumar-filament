@@ -3,12 +3,14 @@
 namespace App\Filament\Customer\Resources\SongResource\Widgets;
 
 use Filament\Tables;
+use App\Models\Label;
+use App\Models\Artists;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Widgets\TableWidget as BaseWidget;
 use App\Filament\Customer\Resources\SongResource;
-use App\Models\Artists;
+use App\Filament\Customer\Resources\MusicResource;
 
 class LatestSongs extends BaseWidget
 {
@@ -21,64 +23,63 @@ class LatestSongs extends BaseWidget
         return $table
             ->paginated(false)
             ->modifyQueryUsing(fn ($query) => $query->where('customer_id', getCurrentCustomer()->id)->limit(10))
-            ->query(SongResource::getEloquentQuery())
+            ->query(MusicResource::getEloquentQuery())
             ->defaultPaginationPageOption(10)
             ->defaultSort('created_at', 'desc')
             ->columns([
 
-                ImageColumn::make('cover_photo')
-                    ->extraImgAttributes(['loading' => 'lazy'])
-                    ->size(150)
-                    ->label('Art Work')
-                    ->url(fn($record) => asset($record->cover_photo))
-                    ->openUrlInNewTab(),
+                ImageColumn::make('album_cover_photo')->extraImgAttributes(['loading' => 'lazy'])->size(150)->toggleable()->label('Artwork')->openUrlInNewTab()
+                ->url(function ($record) {
+                    return asset($record->album_cover_photo);
+                }),
 
-                TextColumn::make('name')
-                    ->label('Song Name'),
+                Tables\Columns\TextColumn::make('album_title')->searchable()->label('Album Name'),
 
-                TextColumn::make('artists_id')
-                    ->label('Artists Name')
-                    ->placeholder('N/A')
-                    ->formatStateUsing(function ($record) {
-                        $badges = [];
-                        foreach ($record->artists_id as $id) {
-                            $artist = Artists::find($id);
-                            if ($artist) {
-                                $badges[] = '<span style="display: inline-block; padding: 1px 10px; background-color: #FFEB3B17; color: #FDD835; border: 1px solid #FDD835; border-radius: 12px; font-size: 0.700rem; font-weight: 500; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); margin-right: 6px;">' . e($artist->name) . '</span>';
-                            }
-                        }
-                        return implode(' ', $badges);
-                    })
-                    ->html(),
+                // Tables\Columns\TextColumn::make('artists.name')->searchable()->label('Artist Name'),
+                Tables\Columns\TextColumn::make('release_primary_artist.name')->searchable()->label('Artist Name'),
 
-                TextColumn::make('publisher')
-                    ->badge()
-                    ->label('Lyricists Name'),
+                // Tables\Columns\TextColumn::make('track.title')->searchable()->label('Label Name'),
 
-                TextColumn::make('composer')
-                    ->badge()
-                    ->label('Music/Composer'),
+                Tables\Columns\TextColumn::make('album_label_id')->searchable()->formatStateUsing(function($record){
+                     return Label::find($record->album_label_id)->title ?? '';
+                })->label('Label Name'),
 
-                TextColumn::make('release_date')
-                    ->date('M d, Y')
-                    ->label('Release Date'),
+                Tables\Columns\TextColumn::make('album_upc_ean')->searchable()->label(' UPC/EAN'),
 
-                TextColumn::make('label.title')
-                    ->placeholder('N/A')
-                    ->label('Label Name'),
+                Tables\Columns\TextColumn::make('isrc_code')->searchable()->label(' ISRC Code'),
 
-                TextColumn::make('isrc_code')
-                    ->placeholder('N/A')
-                    ->label('ISRC Code'),
+                Tables\Columns\TextColumn::make('album_release_type')
+                ->label('Release Type')
+                ->formatStateUsing(fn ($state) => strtoupper($state))
+                ->color(fn ($state) => match ($state) {
+                    'single' => 'success',
+                    'ep' => 'warning',
+                    'album' => 'primary',
+                    default => 'secondary',
+                })
+                ->icon(fn ($state) => match ($state) {
+                    'single' => 'heroicon-o-musical-note',
+                    'ep' => 'heroicon-o-square-3-stack-3d',
+                    'album' => 'heroicon-o-archive-box',
+                    default => 'heroicon-o-question-mark-circle',
+                })
+                ->badge()
+                ->searchable(),
+
+                Tables\Columns\TextColumn::make('album_catalogue_number')->label('Catalogue Number'),
 
                 TextColumn::make('status')
-                    ->badge()
-                    ->formatStateUsing(fn($state) => ucfirst($state))
-                    ->color(fn($state) => match ($state) {
-                        'pending' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'danger',
-                    }),
+                ->badge()
+                ->searchable()
+                ->color(fn ($state) => match ($state) {
+                    'pending' => 'warning',
+                    'approved' => 'success',
+                    'rejected' => 'danger',
+                })
+                ->formatStateUsing(fn ($state) => ucfirst($state))
+
+
+                
             ]);
     }
 }

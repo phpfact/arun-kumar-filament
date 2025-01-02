@@ -15,13 +15,14 @@ class Release extends Model
     protected $table = 'releases';
 
     protected $casts = [
-        // 'track' => 'array',
-        'album_artists_id' => 'array',
+        // 'track'                      => 'array',
+        'album_artists_id'           => 'array',
+        'album_featuring_artists_id' => 'array',
     ];
 
     public function track()
     {
-        return $this->hasOne(Label::class, 'id');
+        return $this->hasOne(Label::class, 'id', 'album_label_id');
     }
 
     public function label()
@@ -42,6 +43,11 @@ class Release extends Model
     public function artists()
     {
         return $this->belongsToMany(Artists::class, 'release_artist');
+    }
+
+    public function release_primary_artist()
+    {
+        return $this->belongsToMany(Artists::class, 'release_primary_artist');
     }
 
     public function customer()

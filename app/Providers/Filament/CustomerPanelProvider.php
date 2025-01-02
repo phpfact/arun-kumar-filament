@@ -72,14 +72,14 @@ class CustomerPanelProvider extends PanelProvider
                         ->url(fn (): string => Dashboard::getUrl()),
                     ...LabelResource::getNavigationItems(),
                     ...ArtistsResource::getNavigationItems(),
+                    ...MusicResource::getNavigationItems(),
                     ...SongResource::getNavigationItems(),
                     ...VideoSongResource::getNavigationItems(),
                     ...RemoveCopyrightRequestResource::getNavigationItems(),
                     ...AnalyticsResource::getNavigationItems(),
                     ...BankAccountResource::getNavigationItems(),
                     ...WithdrawRequestResource::getNavigationItems(),
-                    ...WalletTransactionResource::getNavigationItems(),
-                    ...MusicResource::getNavigationItems()
+                    ...WalletTransactionResource::getNavigationItems()
                     // ...ArtistChannelResource::getNavigationItems(),
                     // ...RoleResource::getNavigationItems(),
                     // ...UserResource::getNavigationItems(),

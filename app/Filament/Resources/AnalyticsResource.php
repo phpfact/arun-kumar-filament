@@ -100,6 +100,7 @@ class AnalyticsResource extends Resource
                         'Hungama',
                         'Wynk Music',
                         'TikTok',
+                        'Snapchat',
                         'Reliance Jio CRBT',
                         'Bharti Airtel CRBT',
                         'Vodafone Idea (Vi) CRBT',
