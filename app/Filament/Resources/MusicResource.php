@@ -11,23 +11,28 @@ use App\Models\Artists;
 use App\Models\Release;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Actions\Action;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Radio;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\MusicResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MusicResource\RelationManagers;
@@ -414,14 +419,14 @@ class MusicResource extends Resource
                                                 ->placeholder('XX-0X0-00-00000')
                                                 ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Please indicate the ISRC code of this track as detailed below:
                                                 i.e.: GB-6V8-12-12340.
-                                        
+
                                                 An ISRC code is composed like this:
                                                 GB : registrant country code
                                                 6V8 : registrant code
                                                 12 : year of registration
                                                 1234 : 4 digits identifying the recording
                                                 0 : "0" for audio, "1" for video
-                                        
+
                                                 This ISRC code is unique to a recording. When an ISRC code is generated for a track, it cannot be modified later.
                                                 Failure to provide the correct unique ISRC to collective societies can lead to the impossibility to match your songs and collect revenue.')
                                                 ->visible(fn(callable $get) => $get('generate_an_isrc') === 'no'),
@@ -438,11 +443,7 @@ class MusicResource extends Resource
                                         ->required()
                                         ->native(false)
                                         ->options(
-                                            Artists::where('customer_id', Auth::guard('customer')->user()->id)->get()->mapWithKeys(function ($artist) {
-                                                return [
-                                                    $artist->instagram => $artist->instagram . ' - (' . $artist->name . ')',
-                                                ];
-                                            })
+                                            []
                                         ),
 
                                         Toggle::make('caller_tune')->live()->onColor('success')->label('Caller Tune'),
@@ -511,47 +512,47 @@ class MusicResource extends Resource
                                             ->label('Spotify Link')
                                             ->url()
                                             ->placeholder('Enter Spotify Link'),
-                        
+
                                         TextInput::make('apple_music_link')
                                             ->label('Apple Music Link')
                                             ->url()
                                             ->placeholder('Enter Apple Music Link'),
-                        
+
                                         TextInput::make('gaana_link')
                                             ->label('Gaana Link')
                                             ->url()
                                             ->placeholder('Enter Gaana Link'),
-                        
+
                                         TextInput::make('jiosaavn_link')
                                             ->label('JioSaavn Link')
                                             ->url()
                                             ->placeholder('Enter JioSaavn Link'),
-                        
+
                                         TextInput::make('hungama_link')
                                             ->label('Hungama Link')
                                             ->url()
                                             ->placeholder('Enter Hungama Link'),
-                        
+
                                         TextInput::make('youtube_music_link')
                                             ->label('YouTube Music Link')
                                             ->url()
                                             ->placeholder('Enter YouTube Music Link'),
-                        
+
                                         TextInput::make('instagram_music_link')
                                             ->label('Instagram Music Link')
                                             ->url()
                                             ->placeholder('Enter Instagram Music Link'),
-                        
+
                                         TextInput::make('amazon_music_link')
                                             ->label('Amazon Music Link')
                                             ->url()
                                             ->placeholder('Enter Amazon Music Link'),
-                        
+
                                         TextInput::make('itunes_link')
                                             ->label('iTunes Link')
                                             ->url()
                                             ->placeholder('Enter iTunes Link'),
-                        
+
                                         TextInput::make('boomplay_link')
                                             ->label('Boomplay Link')
                                             ->url()
@@ -564,7 +565,7 @@ class MusicResource extends Resource
                                                 ->schema([
                                                     TextInput::make('isrc_code')
                                                         ->label('ISRC Code'),
-        
+
                                                     Select::make('status')
                                                         ->required()
                                                         ->live()
@@ -574,7 +575,7 @@ class MusicResource extends Resource
                                                             'approved' => 'Approved',
                                                             'rejected' => 'Rejected',
                                                         ]),
-        
+
                                                     Textarea::make('reject_reason')
                                                         ->columnSpanFull()
                                                         ->required()
@@ -618,7 +619,7 @@ class MusicResource extends Resource
                })->label('Label Name'),
 
                 Tables\Columns\TextColumn::make('album_upc_ean')->searchable()->label(' UPC/EAN'),
-                
+
                 Tables\Columns\TextColumn::make('isrc_code')->searchable()->label(' ISRC Code'),
 
                 Tables\Columns\TextColumn::make('album_release_type')
@@ -652,7 +653,7 @@ class MusicResource extends Resource
                 ->formatStateUsing(fn ($state) => ucfirst($state))
                 ->tooltip(function (TextColumn $column, $record): ?string {
                     $state = $column->getState();
-                    
+
                     if ($state === 'rejected') {
                         return $record->reject_reason ?? 'No reason provided';
                     }
@@ -669,13 +670,95 @@ class MusicResource extends Resource
                 Tables\Actions\DeleteAction::make(),
                 // Tables\Actions\ViewAction::make(),
             ])
+            ->headerActions([
+                Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\TrackExporter::class),
+            ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                BulkAction::make('Download CSV')
+                    ->label('Download CSV')
+                    ->icon('heroicon-o-arrow-down')
+                    ->color('success')
+                    ->action(function ($records) {
+
+                        $ReleasedList = $records->pluck('id')->toArray();
+                        self::handleCustomExport($ReleasedList);
+
+                        Notification::make()->title('under processing...')->success()->send();
+
+                    })
             ]);
     }
 
+    public static function handleCustomExport(array $selected): string
+    {
+      $rows = [];
+        foreach ($selected as $key => $value) {
+
+            $release = Release::where('id', $value)->with('tracks')->with('release_primary_artist')->with('artists')->first();
+            if ($release) {
+
+                $tracks         = $release->tracks;
+                $artists        = $release->artists;
+                $primary_artist = $release->release_primary_artist;
+
+                //Loop on tracks
+                foreach($tracks as $track){
+                    $rows[] = [
+                        'Album title'               => $release->album_title,
+                        'Song title'                => $track->track_song_name,
+                        'Primary artist'            => $primary_artist->pluck('name')->implode(', '),
+                        'Featuring'                 => $artists->pluck('name')->implode(', '),
+                        'Authors'                   => implode(', ', $track->authors),
+                        'Composer'                  => implode(', ', $track->composer),
+                        'Producer'                  => implode(', ', $track->producer),
+                        'Singer Instagram Handle'   => $track->instagram,
+                        'Label Name'                => @Label::find($release->album_label_id)->title ?? '',
+                        'Lyrics Languages'          => $track->lyrics_language,
+                        'Music Genre'               => ucwords(str_replace('_', ' ', $release->album_music_genre)),
+                        'Music Sub-Genre'           => ucwords(str_replace('_', ' ', $release->album_music_sub_genre)),
+                        'Music Mood'                => ucwords(str_replace('_', ' ', $track->track_music_mood)),
+                        'Release date'              => $release->album_release_date,
+                        'All Music Streaming Store' => $release->stream_store == 1 ? 'Yes' : 'No',
+                        'YouTube Music'             => $release->youtube_music == 1 ? 'Yes' : 'No',
+                        'YouTube Content ID'        => $release->yt_content_id == 1 ? 'Yes' : 'No',
+                        'Explicit'                  => $track->explicit == 1 ? 'Yes' : 'No',
+                        'Caller Tune'               => $track->caller_tune == 1 ? 'Yes' : 'No',
+                        'Caller Tune Name'          => is_array($track->caller_tune_name) ? implode(', ', $track->caller_tune_name) : $track->caller_tune_name,
+                        'Caller Tune Duration'      => is_array($track->caller_tune_duration) ? implode(', ', $track->caller_tune_duration) : $track->caller_tune_duration,
+                        'Ask to generate an ISRC'   => ucwords($track->generate_an_isrc),
+                        'ISRC Code'                 => $track->isrc,
+                        'UPC/EAN'                   => $release->album_upc_ean,
+                        'Catalogue number'          => $release->album_catalogue_number,
+                        'Upload Cover'              => $release->album_cover_photo,
+                        'Upload Song'               => $track->song_path,
+                        'Status'                    => ucfirst($release->status),
+                    ];
+
+                }
+
+            }
+
+        }
+
+        $uniqueId = Str::uuid()->toString(); // Generate a UUID for uniqueness
+        $fileName = $uniqueId . '.csv';
+        $filePath = public_path('releases_exports/' . $fileName);
+        $file = fopen($filePath, 'w');
+
+        // Add headers to the CSV file
+        fputcsv($file, ['Album Title', 'Song title', 'Primary artist', 'Featuring', 'Authors', 'Composer', 'Producer', 'Singer Instagram Handle', 'Label Name', 'Lyrics Languages', 'Music Genre', 'Music Sub-Genre', 'Music Mood', 'Release date', 'All Music Streaming Store', 'YouTube Music', 'YouTube Content ID', 'Explicit', 'Caller Tune', 'Caller Tune Name', 'Caller Tune Duration', 'Ask to generate an ISRC', 'ISRC Code', 'UPC/EAN', 'Catalogue number', 'Upload Cover', 'Upload Song', 'Status']);
+
+        // Write the rows to the CSV file
+        foreach ($rows as $row) {
+            fputcsv($file, $row);
+        }
+
+        // Close the file after writing
+        fclose($file);
+
+        // Return the file path for download
+        return $filePath;
+    }
 
     public static function getRelations(): array
     {

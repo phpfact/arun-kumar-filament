@@ -1,0 +1,6 @@
+"Album Title","Album Artists","Music Genre","Track Song Name",ISRC,Explicit,"Featuring Artists","Lyrics Language"
+"Album 1","Artist 1, Artist 2",Pop,"Song 1",ISRC0001,No,"Artist 3",English
+"Album 2","Artist 4",Rock,"Song 2",ISRC0002,Yes,"Artist 5",English
+"Album 3","Artist 6","Hip Hop","Song 3",ISRC0003,No,"Artist 7",Spanish
+"Album 4","Artist 8",Jazz,"Song 4",ISRC0004,Yes,"Artist 9",French
+"Album 5","Artist 10",Classical,"Song 5",ISRC0005,No,"Artist 11",German

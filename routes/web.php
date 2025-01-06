@@ -4,6 +4,8 @@ use App\Models\Customer;
 use Rupadana\FilamentAnnounce\Announce;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
+use Illuminate\Support\Facades\Log;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,8 @@ use App\Http\Controllers\LandingController;
 
 Route::get('/', function () {
     return redirect('admin');
+});
+
+Route::get('/sachin', function () {
+    Log::info('SachinXXXXXXXXXXXXXXXXXXXXX');
 });
