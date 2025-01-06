@@ -683,8 +683,6 @@ class MusicResource extends Resource
                         $ReleasedList = $records->pluck('id')->toArray();
                         self::handleCustomExport($ReleasedList);
 
-                        Notification::make()->title('under processing...')->success()->send();
-
                     })
             ]);
     }
@@ -757,7 +755,19 @@ class MusicResource extends Resource
         fclose($file);
 
         // Return the file path for download
-        return $filePath;
+        $downloadUrl = asset('releases_exports/' . $fileName);
+        Notification::make()->title("Release export is being processed...")->success()->duration(5000)->send();
+
+        $recipient = auth()->user();
+        $recipient->notify(
+            Notification::make()
+                ->title('Release Export')
+                ->body('Your release export has been completed. Click the button below to download the CSV file. ' . "<a href='$downloadUrl' target='_blank' style='color:#FBBF24FF;font-weight:500;'><u>Download CSV</u></a>")
+                ->toDatabase(),
+        );
+
+        return $downloadUrl;
+
     }
 
     public static function getRelations(): array
