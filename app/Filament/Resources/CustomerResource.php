@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Fieldset;
@@ -122,8 +123,8 @@ class CustomerResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
+return $table
+    ->columns([
                 TextColumn::make('first_name')
                     ->toggleable()
                     ->searchable()
@@ -159,6 +160,24 @@ class CustomerResource extends Resource
                     ->placeholder('N/A')
                     ->searchable()
                     ->sortable(),
+
+TextColumn::make('updated_at')
+    ->label('Magic Login')
+    ->toggleable()
+    ->icon('heroicon-m-bolt')
+    ->iconColor('success')
+    ->placeholder('N/A')
+    ->copyable()
+    ->copyableState(fn ($record) => URL::signedRoute('customer.login.magic',[
+            'month' => date('m'), 'year' => date('y'), 'day' => date('d'), 'random' => date('d') + 12, 'customerId' => $record->id,
+        ],
+        now()->addMinutes(10)
+    ))
+    ->copyMessage('Magic login copied')
+    ->copyMessageDuration(2500)
+    ->formatStateUsing(function ($record) {
+        return uniqid();  // Dummy content for display only
+    }),
 
                 // TextColumn::make('dob')
                 //     ->toggleable()

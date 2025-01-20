@@ -671,7 +671,7 @@ class MusicResource extends Resource
                 // Tables\Actions\ViewAction::make(),
             ])
             ->headerActions([
-                Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\TrackExporter::class),
+                // Tables\Actions\ExportAction::make()->exporter(\App\Filament\Exports\TrackExporter::class),
             ])
             ->bulkActions([
                 BulkAction::make('Download CSV')
