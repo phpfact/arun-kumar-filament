@@ -7,8 +7,9 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Pages\Auth\EditProfile as BaseEditProfile;
 
 class EditProfile extends BaseEditProfile
@@ -150,6 +151,16 @@ class EditProfile extends BaseEditProfile
                         $this->getPasswordFormComponent(),
                         $this->getPasswordConfirmationFormComponent(),
                     ]),
+
+
+                  Fieldset::make('Secure Login')
+                      ->columns('auto-fit')
+                      ->schema([
+                          ToggleButtons::make('email_two_factor')
+                              ->label('Email OTP for Two-Factor Authentication ?')
+                              ->boolean()
+                              ->grouped()
+                  ]),
 
             ]);
     }

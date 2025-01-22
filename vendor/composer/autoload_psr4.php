@@ -131,4 +131,6 @@ return array(
     'BladeUI\\Heroicons\\' => array($vendorDir . '/blade-ui-kit/blade-heroicons/src'),
     'App\\' => array($baseDir . '/app', $vendorDir . '/laravel/pint/app'),
     'AnourValar\\EloquentSerialize\\' => array($vendorDir . '/anourvalar/eloquent-serialize/src'),
+    'Afsakar\\FilamentOtpLogin\\Database\\Factories\\' => array($vendorDir . '/afsakar/filament-otp-login/database/factories'),
+    'Afsakar\\FilamentOtpLogin\\' => array($vendorDir . '/afsakar/filament-otp-login/src'),
 );

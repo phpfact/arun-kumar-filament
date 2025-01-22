@@ -241,6 +241,8 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         array (
             'App\\' => 4,
             'AnourValar\\EloquentSerialize\\' => 29,
+            'Afsakar\\FilamentOtpLogin\\Database\\Factories\\' => 44,
+            'Afsakar\\FilamentOtpLogin\\' => 25,
         ),
     );
 
@@ -754,6 +756,14 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         array (
             0 => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src',
         ),
+        'Afsakar\\FilamentOtpLogin\\Database\\Factories\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/afsakar/filament-otp-login/database/factories',
+        ),
+        'Afsakar\\FilamentOtpLogin\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/afsakar/filament-otp-login/src',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -767,6 +777,15 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
     );
 
     public static $classMap = array (
+        'Afsakar\\FilamentOtpLogin\\Commands\\PruneOtpCodes' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Commands/PruneOtpCodes.php',
+        'Afsakar\\FilamentOtpLogin\\FilamentOtpLoginPlugin' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/FilamentOtpLoginPlugin.php',
+        'Afsakar\\FilamentOtpLogin\\FilamentOtpLoginServiceProvider' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/FilamentOtpLoginServiceProvider.php',
+        'Afsakar\\FilamentOtpLogin\\Filament\\Forms\\OtpInput' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Filament/Forms/OtpInput.php',
+        'Afsakar\\FilamentOtpLogin\\Filament\\Pages\\Login' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Filament/Pages/Login.php',
+        'Afsakar\\FilamentOtpLogin\\Models\\Contracts\\CanLoginDirectly' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Models/Contracts/CanLoginDirectly.php',
+        'Afsakar\\FilamentOtpLogin\\Models\\OtpCode' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Models/OtpCode.php',
+        'Afsakar\\FilamentOtpLogin\\Notifications\\SendOtpCode' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Notifications/SendOtpCode.php',
+        'Afsakar\\FilamentOtpLogin\\Testing\\TestsFilamentOtpLogin' => __DIR__ . '/..' . '/afsakar/filament-otp-login/src/Testing/TestsFilamentOtpLogin.php',
         'AnourValar\\EloquentSerialize\\Facades\\EloquentSerializeFacade' => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src/Facades/EloquentSerializeFacade.php',
         'AnourValar\\EloquentSerialize\\Grammars\\EloquentBuilderGrammar' => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src/Grammars/EloquentBuilderGrammar.php',
         'AnourValar\\EloquentSerialize\\Grammars\\ModelGrammar' => __DIR__ . '/..' . '/anourvalar/eloquent-serialize/src/Grammars/ModelGrammar.php',
@@ -797,6 +816,11 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'App\\Filament\\Customer\\Resources\\LabelResource\\Pages\\CreateLabel' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/LabelResource/Pages/CreateLabel.php',
         'App\\Filament\\Customer\\Resources\\LabelResource\\Pages\\EditLabel' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/LabelResource/Pages/EditLabel.php',
         'App\\Filament\\Customer\\Resources\\LabelResource\\Pages\\ListLabels' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/LabelResource/Pages/ListLabels.php',
+        'App\\Filament\\Customer\\Resources\\MusicResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/MusicResource.php',
+        'App\\Filament\\Customer\\Resources\\MusicResource\\Pages\\CreateMusic' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/MusicResource/Pages/CreateMusic.php',
+        'App\\Filament\\Customer\\Resources\\MusicResource\\Pages\\EditMusic' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/MusicResource/Pages/EditMusic.php',
+        'App\\Filament\\Customer\\Resources\\MusicResource\\Pages\\ListMusic' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/MusicResource/Pages/ListMusic.php',
+        'App\\Filament\\Customer\\Resources\\MusicResource\\Pages\\ViewMusic' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/MusicResource/Pages/ViewMusic.php',
         'App\\Filament\\Customer\\Resources\\RemoveCopyrightRequestResource' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/RemoveCopyrightRequestResource.php',
         'App\\Filament\\Customer\\Resources\\RemoveCopyrightRequestResource\\Pages\\CreateRemoveCopyrightRequest' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/RemoveCopyrightRequestResource/Pages/CreateRemoveCopyrightRequest.php',
         'App\\Filament\\Customer\\Resources\\RemoveCopyrightRequestResource\\Pages\\EditRemoveCopyrightRequest' => __DIR__ . '/../..' . '/app/Filament/Customer/Resources/RemoveCopyrightRequestResource/Pages/EditRemoveCopyrightRequest.php',
@@ -822,11 +846,16 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'App\\Filament\\Exports\\AdminRemoveCopyrightRequestResourceExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/AdminRemoveCopyrightRequestResourceExporter.php',
         'App\\Filament\\Exports\\AdminSongResourceExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/AdminSongResourceExporter.php',
         'App\\Filament\\Exports\\AdminVideoResourceExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/AdminVideoResourceExporter.php',
+        'App\\Filament\\Exports\\TrackExporter' => __DIR__ . '/../..' . '/app/Filament/Exports/TrackExporter.php',
         'App\\Filament\\Pages\\Setting' => __DIR__ . '/../..' . '/app/Filament/Pages/Setting.php',
         'App\\Filament\\Resources\\AnalyticsResource' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource.php',
         'App\\Filament\\Resources\\AnalyticsResource\\Pages\\CreateAnalytics' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource/Pages/CreateAnalytics.php',
         'App\\Filament\\Resources\\AnalyticsResource\\Pages\\EditAnalytics' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource/Pages/EditAnalytics.php',
         'App\\Filament\\Resources\\AnalyticsResource\\Pages\\ListAnalytics' => __DIR__ . '/../..' . '/app/Filament/Resources/AnalyticsResource/Pages/ListAnalytics.php',
+        'App\\Filament\\Resources\\AnnounceResource' => __DIR__ . '/../..' . '/app/Filament/Resources/AnnounceResource.php',
+        'App\\Filament\\Resources\\AnnounceResource\\Pages\\CreateAnnounce' => __DIR__ . '/../..' . '/app/Filament/Resources/AnnounceResource/Pages/CreateAnnounce.php',
+        'App\\Filament\\Resources\\AnnounceResource\\Pages\\EditAnnounce' => __DIR__ . '/../..' . '/app/Filament/Resources/AnnounceResource/Pages/EditAnnounce.php',
+        'App\\Filament\\Resources\\AnnounceResource\\Pages\\ListAnnounces' => __DIR__ . '/../..' . '/app/Filament/Resources/AnnounceResource/Pages/ListAnnounces.php',
         'App\\Filament\\Resources\\ArtistChannelResource' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource.php',
         'App\\Filament\\Resources\\ArtistChannelResource\\Pages\\CreateArtistChannel' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource/Pages/CreateArtistChannel.php',
         'App\\Filament\\Resources\\ArtistChannelResource\\Pages\\EditArtistChannel' => __DIR__ . '/../..' . '/app/Filament/Resources/ArtistChannelResource/Pages/EditArtistChannel.php',
@@ -847,6 +876,13 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'App\\Filament\\Resources\\LabelResource\\Pages\\CreateLabel' => __DIR__ . '/../..' . '/app/Filament/Resources/LabelResource/Pages/CreateLabel.php',
         'App\\Filament\\Resources\\LabelResource\\Pages\\EditLabel' => __DIR__ . '/../..' . '/app/Filament/Resources/LabelResource/Pages/EditLabel.php',
         'App\\Filament\\Resources\\LabelResource\\Pages\\ListLabels' => __DIR__ . '/../..' . '/app/Filament/Resources/LabelResource/Pages/ListLabels.php',
+        'App\\Filament\\Resources\\MusicResource' => __DIR__ . '/../..' . '/app/Filament/Resources/MusicResource.php',
+        'App\\Filament\\Resources\\MusicResource\\Pages\\CreateMusic' => __DIR__ . '/../..' . '/app/Filament/Resources/MusicResource/Pages/CreateMusic.php',
+        'App\\Filament\\Resources\\MusicResource\\Pages\\EditMusic' => __DIR__ . '/../..' . '/app/Filament/Resources/MusicResource/Pages/EditMusic.php',
+        'App\\Filament\\Resources\\MusicResource\\Pages\\ListMusic' => __DIR__ . '/../..' . '/app/Filament/Resources/MusicResource/Pages/ListMusic.php',
+        'App\\Filament\\Resources\\NotificationsResource\\Pages\\CreateNotifications' => __DIR__ . '/../..' . '/app/Filament/Resources/NotificationsResource/Pages/CreateNotifications.php',
+        'App\\Filament\\Resources\\NotificationsResource\\Pages\\EditNotifications' => __DIR__ . '/../..' . '/app/Filament/Resources/NotificationsResource/Pages/EditNotifications.php',
+        'App\\Filament\\Resources\\NotificationsResource\\Pages\\ListNotifications' => __DIR__ . '/../..' . '/app/Filament/Resources/NotificationsResource/Pages/ListNotifications.php',
         'App\\Filament\\Resources\\PermissionResource' => __DIR__ . '/../..' . '/app/Filament/Resources/PermissionResource.php',
         'App\\Filament\\Resources\\PermissionResource\\Pages\\CreatePermission' => __DIR__ . '/../..' . '/app/Filament/Resources/PermissionResource/Pages/CreatePermission.php',
         'App\\Filament\\Resources\\PermissionResource\\Pages\\EditPermission' => __DIR__ . '/../..' . '/app/Filament/Resources/PermissionResource/Pages/EditPermission.php',
@@ -897,6 +933,7 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Models\\Analytics' => __DIR__ . '/../..' . '/app/Models/Analytics.php',
+        'App\\Models\\Announce' => __DIR__ . '/../..' . '/app/Models/Announce.php',
         'App\\Models\\ArtistChannel' => __DIR__ . '/../..' . '/app/Models/ArtistChannel.php',
         'App\\Models\\Artists' => __DIR__ . '/../..' . '/app/Models/Artists.php',
         'App\\Models\\BankAccount' => __DIR__ . '/../..' . '/app/Models/BankAccount.php',
@@ -904,10 +941,12 @@ class ComposerStaticInit78f9ac4c8c53db94bfeb0680e793a3ef
         'App\\Models\\CustomerAddress' => __DIR__ . '/../..' . '/app/Models/CustomerAddress.php',
         'App\\Models\\Label' => __DIR__ . '/../..' . '/app/Models/Label.php',
         'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
+        'App\\Models\\Release' => __DIR__ . '/../..' . '/app/Models/Release.php',
         'App\\Models\\RemoveCopyrightRequest' => __DIR__ . '/../..' . '/app/Models/RemoveCopyrightRequest.php',
         'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',
         'App\\Models\\Settings' => __DIR__ . '/../..' . '/app/Models/Settings.php',
         'App\\Models\\Song' => __DIR__ . '/../..' . '/app/Models/Song.php',
+        'App\\Models\\Track' => __DIR__ . '/../..' . '/app/Models/Track.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\VideoSong' => __DIR__ . '/../..' . '/app/Models/VideoSong.php',
         'App\\Models\\Wallet' => __DIR__ . '/../..' . '/app/Models/Wallet.php',

@@ -3,13 +3,22 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '603856212985d3747c99c07f21d277769aed0e5d',
+        'reference' => '93cdd9f42b9ceea5159c5886e0bfef1ea602fc0f',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'afsakar/filament-otp-login' => array(
+            'pretty_version' => 'v1.3.6',
+            'version' => '1.3.6.0',
+            'reference' => 'eb4becae02f1d1a4597abed65d40384c75ceef77',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../afsakar/filament-otp-login',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'anourvalar/eloquent-serialize' => array(
             'pretty_version' => '1.2.25',
             'version' => '1.2.25.0',
@@ -571,7 +580,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '603856212985d3747c99c07f21d277769aed0e5d',
+            'reference' => '93cdd9f42b9ceea5159c5886e0bfef1ea602fc0f',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

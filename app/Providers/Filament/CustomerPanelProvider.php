@@ -20,6 +20,8 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use App\Filament\Customer\Pages\Auth\EditProfile;
 use App\Filament\Customer\Resources\SongResource;
 use App\Filament\Customer\Resources\LabelResource;
+use App\Filament\Customer\Resources\MusicResource;
+use Afsakar\FilamentOtpLogin\FilamentOtpLoginPlugin;
 use App\Filament\Customer\Resources\ArtistsResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Rupadana\FilamentAnnounce\FilamentAnnouncePlugin;
@@ -30,7 +32,6 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Customer\Resources\BankAccountResource;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Customer\Resources\ArtistChannelResource;
-use App\Filament\Customer\Resources\MusicResource;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Filament\Customer\Resources\WithdrawRequestResource;
@@ -58,6 +59,7 @@ class CustomerPanelProvider extends PanelProvider
             ->brandLogoHeight('4rem')
             ->homeUrl('/')
             ->plugin(
+                FilamentOtpLoginPlugin::make(),
                 FilamentAnnouncePlugin::make()
                     ->pollingInterval('30s') // optional, by default it is set to null
                     ->defaultColor(Color::Blue) // optional, by default it is set to "primary"
